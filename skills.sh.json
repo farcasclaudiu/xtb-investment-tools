@@ -4,10 +4,11 @@
   "groupings": [
     {
       "title": "XTB Tools",
-      "description": "Skills for analyzing XTB brokerage exports and preparing Wealthfolio imports.",
+      "description": "Skills for analyzing XTB brokerage exports and preparing portfolio-app imports.",
       "skills": [
         "xtb-portfolio-review",
-        "xtb-wealthfolio-export"
+        "xtb-wealthfolio-export",
+        "xtb-portfolio-performance-export"
       ]
     }
   ]

@@ -1,4 +1,4 @@
-# XTB Portfolio Review & Wealthfolio Exporter
+# XTB Portfolio Review & CSV Exporters
 
 [![skills.sh](https://skills.sh/b/farcasclaudiu/xtb-investment-tools)](https://skills.sh/farcasclaudiu/xtb-investment-tools)
 
@@ -6,6 +6,8 @@ A set of Python tools that turn an **XTB brokerage report** (`.xlsx` export) int
 
 1. A complete, human-readable **portfolio review** (console and a self-contained HTML report with interactive, offline charts and analysis tables).
 2. A **Wealthfolio-compatible CSV** so the same XTB history can be imported into the [Wealthfolio](https://wealthfolio.app/) portfolio tracker.
+3. **Portfolio Performance-compatible CSVs** split into Portfolio Transactions
+   and Account Transactions for import into [Portfolio Performance](https://www.portfolio-performance.info/).
 
 The parser is generic for XTB exports in this format. Tests generate a small
 synthetic workbook at runtime, while personal brokerage exports should stay
@@ -67,6 +69,23 @@ Use the XTB Wealthfolio export skill with EUR_demo_report.xlsx as the input file
 and write the Wealthfolio CSV to results/EUR_demo_report_wealthfolio.csv.
 ```
 
+Portfolio Performance export prompt examples:
+
+```text
+Use the XTB Portfolio Performance export skill to create and validate CSV files
+from my XTB workbook.
+```
+
+```text
+Use the XTB Portfolio Performance export skill and explain how to import the two
+generated CSV files into Portfolio Performance.
+```
+
+```text
+Use the XTB Portfolio Performance export skill with EUR_demo_report.xlsx as the
+input file and write the CSV files to results/.
+```
+
 ### Run the tools directly
 
 From the repository root:
@@ -78,12 +97,16 @@ python3 -m venv .venv
 
 .venv/bin/python main.py path/to/xtb-report.xlsx
 .venv/bin/python exporter.py path/to/xtb-report.xlsx
+.venv/bin/python portfolio_performance_exporter.py path/to/xtb-report.xlsx
 ```
 
 Outputs are written to `results/`, including
 `results/<stem>_review.html` for the portfolio review and
-`results/<stem>_wealthfolio.csv` for the Wealthfolio import file. If there is
-exactly one `.xlsx` file in the current folder, both tools can auto-detect it
+`results/<stem>_wealthfolio.csv` for the Wealthfolio import file. The Portfolio
+Performance exporter writes
+`results/<stem>_portfolio_performance_portfolio_transactions.csv` and
+`results/<stem>_portfolio_performance_account_transactions.csv`. If there is
+exactly one `.xlsx` file in the current folder, the tools can auto-detect it
 when the path is omitted. Add `--csv` to the portfolio review command only when
 you want the extra per-section CSV exports.
 
@@ -113,7 +136,7 @@ Two quirks the code handles explicitly:
 - **Stock-sale close notation**: some XTB stock-sale rows are written as
   `CLOSE BUY ...` while the row type is `Stock sell` and the amount is positive
   sale proceeds. The tools treat these as sales for holdings, cash flows, and
-  Wealthfolio export.
+  Wealthfolio and Portfolio Performance export.
 
 ---
 
@@ -124,8 +147,9 @@ Two quirks the code handles explicitly:
 | File          | Purpose                                                                                                                                                                                                                                                                                                                                           |
 | ------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
 | `skills/xtb-portfolio-review/scripts/main.py` | **Portfolio review generator.** Parses the XTB report, reconstructs trades from Cash Operations comments, runs FIFO lot-matching for realized P/L, computes cash flows, holdings (cost basis), performance metrics, contribution/risk/income analysis, and reconciliation against the broker's `Total` row. Outputs a console report and a self-contained HTML report with interactive Chart.js charts and offline table tools (bundled inline, no internet required). |
-| `skills/xtb-wealthfolio-export/scripts/exporter.py` | **XTB → Wealthfolio CSV exporter.** Maps each Cash Operation to a Wealthfolio row (`date,symbol,quantity,activityType,unitPrice,currency,fee`). |
-| `main.py`, `exporter.py`, `html_charts.py` | Thin compatibility entry points that preserve the original repo commands/imports while delegating to the bundled skill implementations. |
+| `skills/xtb-wealthfolio-export/scripts/exporter.py` | **XTB -> Wealthfolio CSV exporter.** Maps each Cash Operation to a Wealthfolio row (`date,symbol,quantity,activityType,unitPrice,currency,fee`). |
+| `skills/xtb-portfolio-performance-export/scripts/exporter.py` | **XTB -> Portfolio Performance CSV exporter.** Splits XTB cash operations into Portfolio Transactions and Account Transactions CSV files. |
+| `main.py`, `exporter.py`, `portfolio_performance_exporter.py`, `html_charts.py` | Thin compatibility entry points that preserve the original repo commands/imports while delegating to the bundled skill implementations. |
 
 ### Tests
 
@@ -133,6 +157,7 @@ Two quirks the code handles explicitly:
 | ------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
 | `test_portfolio.py` | Unit + integration tests for `main.py` (parsing, FIFO realized P/L, cash-flow categorization, income, open positions, performance, analysis helpers, reconciliation against the generated synthetic workbook, HTML structure and interactions). |
 | `test_exporter.py`  | Tests for `exporter.py` (activity-type classification, the split-fill quantity parser, full row mapping, schema validation on the generated synthetic workbook, empty-input handling).                       |
+| `test_portfolio_performance_exporter.py` | Tests for `portfolio_performance_exporter.py` (two-file CSV export, semicolon schema, transaction separation, account labels, split fills, empty-input handling). |
 
 ### Local inputs
 
@@ -157,6 +182,8 @@ automatically) and **named after the input report**: for input
 | `results/<stem>_income.csv`                       | `main.py`     | Income (dividends + interest) by month.                                     |
 | `results/<stem>_evolution.csv`                    | `main.py`     | Daily cost / market value / realized P/L series (drives the evolution chart).|
 | `results/<stem>_wealthfolio.csv`                  | `exporter.py` | Wealthfolio-importable transaction history.                                 |
+| `results/<stem>_portfolio_performance_portfolio_transactions.csv` | `portfolio_performance_exporter.py` | Portfolio Performance `Portfolio Transactions` import file for buys and sells. |
+| `results/<stem>_portfolio_performance_account_transactions.csv` | `portfolio_performance_exporter.py` | Portfolio Performance `Account Transactions` import file for deposits, dividends, taxes, interest, fees, and transfers. |
 
 ---
 
@@ -187,6 +214,7 @@ copy/install/use instructions.
 | ----- | ------- |
 | `xtb-portfolio-review` | Generate and verify XTB portfolio review reports, including reconciliation, holdings, performance, income, risk, and data-quality caveats. |
 | `xtb-wealthfolio-export` | Export and validate Wealthfolio-compatible CSV files from XTB reports, including activity mappings and import-readiness checks. |
+| `xtb-portfolio-performance-export` | Export and validate Portfolio Performance-compatible CSV files from XTB reports, including import workflow instructions. |
 
 Use the skill folder directly, or copy it into the skill/instruction directory
 for your harness. With a generic LLM, ask it to read the relevant `SKILL.md`.
@@ -196,6 +224,7 @@ it in a new session:
 ```text
 Use $xtb-portfolio-review to generate and verify an XTB portfolio report.
 Use $xtb-wealthfolio-export to create and validate a Wealthfolio CSV from an XTB report.
+Use $xtb-portfolio-performance-export to create and validate Portfolio Performance CSV files from an XTB report.
 ```
 
 Each copied skill folder includes `scripts/requirements.txt` plus shell wrappers
@@ -205,6 +234,7 @@ want `.venv` and `results/` to live, install dependencies with:
 ```bash
 skills/xtb-portfolio-review/scripts/setup-env.sh
 skills/xtb-wealthfolio-export/scripts/setup-env.sh
+skills/xtb-portfolio-performance-export/scripts/setup-env.sh
 ```
 
 ## Usage
@@ -253,6 +283,49 @@ The generated review HTML is a single offline file. It includes:
 .venv/bin/python exporter.py                          # uses the default report -> results/<stem>_wealthfolio.csv
 .venv/bin/python exporter.py EUR_other.xlsx -o my.csv  # explicit input/output
 ```
+
+### Export to Portfolio Performance CSV
+
+```bash
+.venv/bin/python portfolio_performance_exporter.py EUR_demo_report.xlsx
+.venv/bin/python portfolio_performance_exporter.py EUR_demo_report.xlsx -o results
+.venv/bin/python portfolio_performance_exporter.py EUR_demo_report.xlsx --securities-account "XTB" --cash-account "XTB (EUR)"
+```
+
+The exporter writes two UTF-8 semicolon-delimited files:
+
+- `results/<stem>_portfolio_performance_portfolio_transactions.csv`
+- `results/<stem>_portfolio_performance_account_transactions.csv`
+
+Import them into Portfolio Performance in this order:
+
+1. In Portfolio Performance, create or open the target portfolio file.
+2. Ensure the Portfolio Performance `Securities Account` and `Deposit Account`
+   exist, or use the importer's account selection step to create/select them.
+   Defaults expected from the CSV are `XTB` and `XTB (<CCY>)`.
+3. Import `results/<stem>_portfolio_performance_portfolio_transactions.csv`
+   first via `File > Import > CSV files`.
+4. In the CSV wizard, select type `Portfolio Transactions`.
+5. Use `UTF-8`, delimiter `semicolon`, and enable `First line contains header`.
+6. Confirm mappings for `Date`, `Type`, `Shares`, `Ticker Symbol`,
+   `Security Name`, `Value`, `Fees`, `Taxes`, `Securities Account`, and
+   `Cash Account`. In the CSV importer, `Cash Account` maps to the Portfolio
+   Performance deposit account.
+7. Finish that import and resolve any security matching prompts before
+   continuing.
+8. Import `results/<stem>_portfolio_performance_account_transactions.csv` via
+   `File > Import > CSV files`.
+9. In the CSV wizard, select type `Account Transactions`.
+10. Use the same CSV settings: `UTF-8`, semicolon delimiter, first line header.
+11. Confirm mappings for `Date`, `Type`, `Value`, `Ticker Symbol`,
+    `Security Name`, `Shares`, `Gross Amount`, `Currency Gross Amount`,
+    `Cash Account`, and `Offset Account`. In the CSV importer, `Cash Account`
+    maps to the Portfolio Performance deposit account.
+12. Review Portfolio Performance's preview/status column before finishing,
+    especially transfers, taxes, and dividends.
+
+Portfolio transactions should usually be imported before account transactions
+so referenced securities exist before dividend rows are processed.
 
 ### Run the tests
 
@@ -317,6 +390,24 @@ value in the `amount` column with `quantity = 1` and `unitPrice = 1`; the `fee` 
 only used for inline `BUY`/`SELL` commissions. Pure-cash rows use the `$CASH-<CCY>` symbol
 (e.g. `$CASH-EUR`), while `DIVIDEND` keeps the security's real ticker. `BUY`/`SELL` leave
 `amount` blank — Wealthfolio auto-calculates it as `quantity × unitPrice`.
+
+### Portfolio Performance activity mapping
+
+| XTB operation                                      | Portfolio Performance import row |
+| -------------------------------------------------- | -------------------------------- |
+| `Stock purchase` / `OPEN BUY`                      | Portfolio `Buy`                  |
+| `Stock sale` / `Stock sell` / `CLOSE SELL` / `OPEN SELL` | Portfolio `Sell`          |
+| `Stock sell` with `CLOSE BUY`                      | Portfolio `Sell`                 |
+| `Deposit` / `Withdrawal`                           | Account `Deposit` / `Withdrawal` |
+| `Dividend`                                         | Account `Dividend`               |
+| `Free funds interest`                              | Account `Interest`               |
+| `Dividend tax` / `RO tax` / interest tax rows      | Account `Taxes`                  |
+| `Currency conversion`                              | Account `Fees`                   |
+| `Subaccount transfer` / `Transfer`                 | Account `Transfer (Inbound/Outbound)` |
+
+The Portfolio Performance exporter follows the app's documented import split:
+use the `Portfolio Transactions` CSV for buys/sells and the `Account
+Transactions` CSV for cash movements, income, taxes, fees, and transfers.
 
 ---
 

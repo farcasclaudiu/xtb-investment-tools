@@ -2,10 +2,11 @@
 
 This file is written for LLM agents and coding assistants. Follow it when a user asks you to install, use, or copy the XTB portfolio skills from this repository.
 
-The repository ships two standalone, harness-neutral skill folders:
+The repository ships three standalone, harness-neutral skill folders:
 
 - `skills/xtb-portfolio-review`
 - `skills/xtb-wealthfolio-export`
+- `skills/xtb-portfolio-performance-export`
 
 Each skill folder is self-contained: it includes `SKILL.md`, references, runnable scripts, Python source files, requirements, and offline Chart.js assets where needed. Users may copy a single skill folder without cloning the full repository.
 
@@ -30,6 +31,7 @@ For Codex:
 mkdir -p "$HOME/.codex/skills"
 cp -R skills/xtb-portfolio-review "$HOME/.codex/skills/"
 cp -R skills/xtb-wealthfolio-export "$HOME/.codex/skills/"
+cp -R skills/xtb-portfolio-performance-export "$HOME/.codex/skills/"
 ```
 
 For a generic agent workspace, copy the skill folders to a user-chosen directory:
@@ -38,6 +40,7 @@ For a generic agent workspace, copy the skill folders to a user-chosen directory
 mkdir -p ./agent-skills
 cp -R skills/xtb-portfolio-review ./agent-skills/
 cp -R skills/xtb-wealthfolio-export ./agent-skills/
+cp -R skills/xtb-portfolio-performance-export ./agent-skills/
 ```
 
 If only one workflow is needed, copy only that folder.
@@ -65,6 +68,14 @@ For Wealthfolio export:
 /path/to/xtb-wealthfolio-export/scripts/export-wealthfolio.sh /path/to/report.xlsx
 ```
 
+For Portfolio Performance export:
+
+```bash
+/path/to/xtb-portfolio-performance-export/scripts/setup-env.sh
+/path/to/xtb-portfolio-performance-export/scripts/validate-export.sh
+/path/to/xtb-portfolio-performance-export/scripts/export-portfolio-performance.sh /path/to/report.xlsx
+```
+
 The setup scripts create or reuse `.venv` in the current working directory. If network access or package installation requires approval, ask before running `setup-env.sh`.
 
 ## Use Without Installing
@@ -85,6 +96,10 @@ Read skills/xtb-portfolio-review/SKILL.md and use that skill to generate a portf
 
 ```text
 Read skills/xtb-wealthfolio-export/SKILL.md and use that skill to create a Wealthfolio CSV from my XTB export.
+```
+
+```text
+Read skills/xtb-portfolio-performance-export/SKILL.md and use that skill to create Portfolio Performance CSV files from my XTB export.
 ```
 
 ## Skill Contents
@@ -117,9 +132,23 @@ skills/
       html_charts.py
       requirements.txt
       assets/
+
+  xtb-portfolio-performance-export/
+    SKILL.md
+    references/
+    scripts/
+      setup-env.sh
+      validate-export.sh
+      export-portfolio-performance.sh
+      exporter.py
+      main.py
+      html_charts.py
+      requirements.txt
 ```
 
-Do not require the root-level `main.py`, `exporter.py`, or `html_charts.py` for copied skill usage. Those root files are repository compatibility shims only.
+Do not require the root-level `main.py`, `exporter.py`,
+`portfolio_performance_exporter.py`, or `html_charts.py` for copied skill
+usage. Those root files are repository compatibility shims only.
 
 ## Verification Commands
 
@@ -128,6 +157,7 @@ From the repository root:
 ```bash
 skills/xtb-portfolio-review/scripts/validate-review.sh
 skills/xtb-wealthfolio-export/scripts/validate-export.sh
+skills/xtb-portfolio-performance-export/scripts/validate-export.sh
 ```
 
 If the full repository test suite is available:
