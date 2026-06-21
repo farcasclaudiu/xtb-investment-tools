@@ -7,6 +7,12 @@ description: Use when analyzing XTB brokerage .xlsx exports, creating investment
 
 Use this skill to run and assess XTB portfolio reviews from a copied skill folder. The skill bundles the required Python tools in `scripts/`, so it can run without the original repository as long as Python dependencies are installed.
 
+## Example Prompts
+
+- Use the XTB portfolio review skill to analyze `report.xlsx`, generate the HTML report, and validate cash reconciliation.
+- Review my XTB brokerage export and summarize holdings, dividends, performance, income, and risk caveats.
+- Generate the portfolio review with CSV exports and tell me whether the broker cash total reconciles.
+
 ## Workflow
 
 1. Identify the target workbook. If the user does not name one and exactly one non-lock `.xlsx` exists in the current working directory, use it.

@@ -7,6 +7,12 @@ description: Use when converting XTB brokerage .xlsx exports to Wealthfolio-comp
 
 Use this skill to create and validate Wealthfolio CSV files from XTB `Cash Operations` data from a copied skill folder. The skill bundles the required Python tools in `scripts/`, so it can run without the original repository as long as Python dependencies are installed.
 
+## Example Prompts
+
+- Use the XTB Wealthfolio export skill to convert `report.xlsx` into a Wealthfolio-compatible CSV.
+- Validate the generated Wealthfolio CSV and check trade, dividend, tax, deposit, and withdrawal mappings.
+- Export my XTB brokerage history to Wealthfolio CSV and write the output to `results/import.csv`.
+
 ## Workflow
 
 1. Identify the target workbook. If omitted and exactly one non-lock `.xlsx` exists in the current working directory, the exporter can auto-detect it.
