@@ -1,6 +1,7 @@
 ---
 name: xtb-portfolio-performance-export
 description: Use when converting XTB brokerage .xlsx exports to Portfolio Performance-compatible CSV files, validating Portfolio Transactions and Account Transactions outputs, or explaining the Portfolio Performance import workflow.
+version: 1.0.1
 ---
 
 # XTB Portfolio Performance Export
