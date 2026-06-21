@@ -1,0 +1,42 @@
+---
+name: xtb-portfolio-review
+description: Use when analyzing XTB brokerage .xlsx exports with the local portfolio review tool, generating or checking HTML/CSV reports, validating cash reconciliation, reviewing holdings, risk, income, performance, or explaining report outputs from main.py.
+---
+
+# XTB Portfolio Review
+
+Use this skill to run and assess XTB portfolio reviews from a copied skill folder. The skill bundles the required Python tools in `scripts/`, so it can run without the original repository as long as Python dependencies are installed.
+
+## Workflow
+
+1. Identify the target workbook. If the user does not name one and exactly one non-lock `.xlsx` exists in the current working directory, use it.
+2. Ensure dependencies are available:
+   `<skill-folder>/scripts/setup-env.sh`
+3. Validate the bundled tools:
+   `<skill-folder>/scripts/validate-review.sh`
+4. Generate the review from the directory where outputs should be written:
+   `<skill-folder>/scripts/run-review.sh <report.xlsx>`
+5. Inspect `results/` outputs named from the workbook stem, especially `_review.html`, `_holdings.csv`, `_cash_flows.csv`, `_performance.csv`, `_income.csv`, and `_evolution.csv`.
+6. Check whether computed ending cash reconciles to the broker `Total` row within EUR/USD/etc. `0.01`.
+7. Report findings with caveats: cost-priced tickers, missing live prices, cash mismatch, XIRR availability, concentration, income tax drag, and any generated file paths.
+
+## Bundled Tools
+
+- `scripts/main.py`: standalone XTB portfolio review generator.
+- `scripts/html_charts.py`: offline Chart.js report rendering helper.
+- `scripts/assets/chartjs.umd.min.js`: vendored Chart.js bundle for self-contained HTML.
+- `scripts/run-review.sh`: shell wrapper that runs the bundled review tool with `--csv`.
+- `scripts/validate-review.sh`: dependency and asset smoke check.
+- `scripts/setup-env.sh`: creates `.venv` in the current working directory and installs dependencies.
+- `scripts/requirements.txt`: Python dependencies.
+
+## References
+
+- Read `references/xtb-format.md` when parsing behavior, report assumptions, or XTB edge cases matter.
+- Read `references/validation-checklist.md` before claiming a generated portfolio review is correct or ready to use.
+
+## Guardrails
+
+- Do not treat the generated report as investment advice; describe what the tool computed and the data-quality limits.
+- Prefer the bundled validation script and generated CSVs over eyeballing the HTML alone.
+- Preserve offline/self-contained HTML behavior; do not introduce CDN dependencies when modifying the report.
