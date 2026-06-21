@@ -21,6 +21,12 @@ follow [`INSTALL_FOR_AGENTS.md`](INSTALL_FOR_AGENTS.md). That file tells the
 agent how to install or use the portable skill folders, validate them, and run
 the right workflow for your XTB workbook.
 
+Install the XTB agent skills:
+
+```bash
+npx skills add farcasclaudiu/xtb-investment-tools
+```
+
 Install prompt:
 
 ```text
