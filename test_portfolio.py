@@ -1306,10 +1306,11 @@ class TestHtmlReport:
         )
         assert "A ticker is the short code used by markets and brokers" in html
         assert "realized_pl means realized profit or loss" in html
-        assert "Computed ending cash is the cash balance calculated from all cash operations" in html
-        assert "Broker &#x27;Total&#x27; (cash) is the cash total reported by XTB" in html
-        assert "Difference shows computed cash minus broker-reported cash" in html
-        assert "Status tells you whether the reconciliation check passed" in html
+        assert "cash balance calculated by this report from deposits, withdrawals, trades" in html
+        assert "cash left in the account, not the value of your stocks or ETFs" in html
+        assert "Computed cash minus XTB cash" in html
+        assert "whether the cash check passed" in html
+        assert "This check makes sure the report read your cash movements correctly" in html
 
 
 # ---------------------------------------------------------------------------

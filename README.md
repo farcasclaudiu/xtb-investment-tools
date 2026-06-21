@@ -101,7 +101,8 @@ An XTB report is an `.xlsx` file with a fixed layout:
   - `Cash Operations` — every cash flow: stock purchases/sales, deposits, withdrawals,
     dividends, dividend tax, free-funds interest, currency conversions. Each trade row
     carries a comment like `OPEN BUY 6 @ 301.50` or `CLOSE SELL 2 @ 100.00`, and the
-    sheet ends with a `Total` row (the broker-reported ending cash balance).
+    sheet ends with a `Total` row. That `Total` is the final cash left in the account,
+    not the value of stocks or ETFs.
 
 Two quirks the code handles explicitly:
 
@@ -278,7 +279,8 @@ The generated review HTML is a single offline file. It includes:
 - **Realized P/L** prefers the broker's `Closed Positions` `Profit/Loss` column; when that
   is absent, it falls back to **FIFO lot matching** from CLOSE trades.
 - **Cash flows** are categorized (deposits, withdrawals, interest, dividends, dividend tax,
-  FX fees, invested, proceeds) and reconciled against the broker's `Total` (ending cash).
+  FX fees, invested, proceeds). The report then checks whether its calculated ending cash
+  matches XTB's `Total` row, which is the final cash left in the account.
 - **Performance** combines **live market value** (or cost basis fallback) with cash to give
   portfolio value, total gain, total return %, money-weighted return (XIRR), and
   income yield. XIRR uses external deposits/withdrawals plus terminal portfolio
@@ -327,8 +329,9 @@ only used for inline `BUY`/`SELL` commissions. Pure-cash rows use the `$CASH-<CC
   table, and evolution chart. The methodology section lists every cost fallback ticker.
 - **Money-weighted return (XIRR)** requires at least one external cash outflow and
   one inflow. When the dated cash-flow series cannot be solved, the report shows `n/a`.
-- **Reconciliation** compares computed ending cash against the XTB `Total` row; it reports
-  `[OK]` when they match within €0.01.
+- **Reconciliation** checks whether the report's calculated ending cash matches XTB's
+  `Total` row. This is a cash check only: it does not compare the full value of the
+  portfolio. It reports `[OK]` when the two cash numbers match within €0.01.
 - **HTML interactions** (charts, sorting, filtering, sticky navigation) are all inline
   and offline; no CDN or network access is required to open the generated report.
 - Thousand-separators are intentionally **not** parsed in numeric fields (ambiguous with

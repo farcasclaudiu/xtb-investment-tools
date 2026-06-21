@@ -1535,12 +1535,12 @@ TERM_TOOLTIPS = {
     "Pricing coverage": "How many holdings use live prices versus cost fallback values.",
     "Cost fallback tickers": "Tickers valued at cost because a trusted live price was unavailable. Their real market value may be higher or lower.",
     "Cost fallback positions": "Positions valued at cost because a trusted live price was unavailable. Their real market value may be higher or lower.",
-    "Reconciliation": "A check that computed ending cash matches the broker's reported cash total.",
-    "Cash reconciliation": "A check that computed ending cash matches the broker's reported cash total.",
-    "Computed ending cash": "Computed ending cash is the cash balance calculated from all cash operations in the report.",
-    "Broker 'Total' (cash)": "Broker 'Total' (cash) is the cash total reported by XTB at the end of the Cash Operations sheet.",
-    "Difference": "Difference shows computed cash minus broker-reported cash. A value near zero means the calculation reconciles.",
-    "Status": "Status tells you whether the reconciliation check passed or needs attention.",
+    "Reconciliation": "A check that the report's cash math matches the final cash amount shown by XTB.",
+    "Cash reconciliation": "A check that the report's cash math matches the final cash amount shown by XTB.",
+    "Computed ending cash": "The cash balance calculated by this report from deposits, withdrawals, trades, dividends, fees, and taxes.",
+    "Broker 'Total' (cash)": "The final cash amount shown by XTB. This is cash left in the account, not the value of your stocks or ETFs.",
+    "Difference": "Computed cash minus XTB cash. A value close to zero means the cash movements were read correctly.",
+    "Status": "Shows whether the cash check passed or whether the numbers need attention.",
     "Gross income": "Dividends plus interest before dividend tax.",
     "Dividend tax": "Tax withheld from dividend payments.",
     "Net income": "Income remaining after dividend tax.",
@@ -2085,7 +2085,7 @@ def build_html_report(
     <div class="card" id='reconciliation'>
       <h2>Reconciliation</h2>
       {_kv_table(recon_rows)}
-      <p class="muted">XTB "Total" row reflects ending free cash; reconciled against computed cash balance.</p>
+      <p class="muted">This check makes sure the report read your cash movements correctly. XTB's "Total" row is the cash left in your account at the end of the period, not the value of your stocks or ETFs. The report calculates the same cash balance from deposits, withdrawals, trades, dividends, fees, and taxes, then compares both numbers.</p>
     </div>
   </div>
 
