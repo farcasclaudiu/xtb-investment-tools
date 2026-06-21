@@ -1,5 +1,7 @@
 # XTB Portfolio Review & Wealthfolio Exporter
 
+[![skills.sh](https://skills.sh/b/farcasclaudiu/xtb-investment-tools)](https://skills.sh/farcasclaudiu/xtb-investment-tools)
+
 A set of Python tools that turn an **XTB brokerage report** (`.xlsx` export) into:
 
 1. A complete, human-readable **portfolio review** (console and a self-contained HTML report with interactive, offline charts and analysis tables).
