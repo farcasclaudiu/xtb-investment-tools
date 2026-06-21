@@ -22,14 +22,17 @@ _IMPL_PATH = (
 
 
 def _load_impl():
+    module_name = __name__ if __name__ != "__main__" else "_xtb_wealthfolio_exporter_impl"
     script_dir = _IMPL_PATH.parent
     if str(script_dir) not in sys.path:
         sys.path.insert(0, str(script_dir))
-    spec = importlib.util.spec_from_file_location(__name__, _IMPL_PATH)
+    spec = importlib.util.spec_from_file_location(module_name, _IMPL_PATH)
     if spec is None or spec.loader is None:
         raise ImportError(f"Could not load XTB Wealthfolio implementation at {_IMPL_PATH}")
     module = importlib.util.module_from_spec(spec)
-    sys.modules[__name__] = module
+    sys.modules[module_name] = module
+    if __name__ != "__main__":
+        sys.modules[__name__] = module
     spec.loader.exec_module(module)
     return module
 

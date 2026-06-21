@@ -2,6 +2,7 @@ import argparse
 import contextlib
 import io
 import re
+import warnings
 from dataclasses import dataclass, field
 from datetime import datetime, date, timedelta
 from html import escape
@@ -36,6 +37,18 @@ COST_FALLBACK_NOTES = {
         "the broker (different share class), so held at cost"
     ),
 }
+
+
+def suppress_openpyxl_default_style_warning() -> None:
+    warnings.filterwarnings(
+        "ignore",
+        message=r"Workbook contains no default style, apply openpyxl's default",
+        category=UserWarning,
+        module=r"openpyxl\.styles\.stylesheet",
+    )
+
+
+suppress_openpyxl_default_style_warning()
 
 # XTB "Type" values that represent trading activity (not cash transfers).
 TRADE_TYPE_RE = re.compile(

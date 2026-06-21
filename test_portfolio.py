@@ -1,3 +1,5 @@
+import warnings
+
 import pandas as pd
 import pytest
 
@@ -44,6 +46,27 @@ def cash_row(type_, instrument, amount, comment="", time="2026-01-15 10:00:00"):
 # Generic helpers
 # ---------------------------------------------------------------------------
 class TestHelpers:
+    def test_suppresses_openpyxl_default_style_warning_only(self):
+        with warnings.catch_warnings(record=True) as caught:
+            warnings.simplefilter("default")
+            main.suppress_openpyxl_default_style_warning()
+            warnings.warn_explicit(
+                "Workbook contains no default style, apply openpyxl's default",
+                UserWarning,
+                "stylesheet.py",
+                237,
+                module="openpyxl.styles.stylesheet",
+            )
+            warnings.warn_explicit(
+                "Another workbook warning",
+                UserWarning,
+                "stylesheet.py",
+                237,
+                module="openpyxl.styles.stylesheet",
+            )
+
+        assert [str(w.message) for w in caught] == ["Another workbook warning"]
+
     def test_clean_columns_normalizes(self):
         df = pd.DataFrame(columns=["Open Price", "Profit/Loss", "  Ticker  "])
         out = clean_columns(df)
