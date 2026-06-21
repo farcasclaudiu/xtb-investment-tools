@@ -54,6 +54,9 @@ For portfolio review:
 /path/to/xtb-portfolio-review/scripts/run-review.sh /path/to/report.xlsx
 ```
 
+Append `--csv` to `run-review.sh` only when the user explicitly asks for the
+per-section CSV exports.
+
 For Wealthfolio export:
 
 ```bash

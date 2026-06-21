@@ -1,3 +1,5 @@
+import os
+import subprocess
 import warnings
 
 import pandas as pd
@@ -825,6 +827,42 @@ class TestSyntheticReport:
         assert holdings["cost_basis"].sum() == pytest.approx(300.0)
         assert "name" in holdings.columns
         assert holdings["allocation_pct"].sum() == pytest.approx(100.0, abs=0.05)
+
+
+# ---------------------------------------------------------------------------
+# Bundled script wrappers
+# ---------------------------------------------------------------------------
+class TestPortfolioReviewWrapper:
+    def test_run_review_does_not_generate_csv_unless_requested(self, tmp_path):
+        calls_file = tmp_path / "python-args.txt"
+        fake_python = tmp_path / "fake-python.sh"
+        fake_python.write_text(
+            "#!/usr/bin/env bash\n"
+            "printf '%s\\n' \"$@\" > \"$CALLS_FILE\"\n",
+            encoding="utf-8",
+        )
+        fake_python.chmod(0o755)
+
+        env = os.environ | {"PYTHON": str(fake_python), "CALLS_FILE": str(calls_file)}
+        subprocess.run(
+            ["skills/xtb-portfolio-review/scripts/run-review.sh", "EUR_demo_report.xlsx"],
+            check=True,
+            env=env,
+        )
+        default_args = calls_file.read_text(encoding="utf-8").splitlines()
+        assert "--csv" not in default_args
+
+        subprocess.run(
+            [
+                "skills/xtb-portfolio-review/scripts/run-review.sh",
+                "EUR_demo_report.xlsx",
+                "--csv",
+            ],
+            check=True,
+            env=env,
+        )
+        explicit_args = calls_file.read_text(encoding="utf-8").splitlines()
+        assert "--csv" in explicit_args
 
 
 # ---------------------------------------------------------------------------

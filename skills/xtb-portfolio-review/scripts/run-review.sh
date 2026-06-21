@@ -10,4 +10,4 @@ else
   PYTHON_BIN="python3"
 fi
 
-exec "$PYTHON_BIN" "$SCRIPT_DIR/main.py" "$@" --csv
+exec "$PYTHON_BIN" "$SCRIPT_DIR/main.py" "$@"

@@ -9,6 +9,76 @@ The parser is generic for XTB exports in this format. Tests generate a small
 synthetic workbook at runtime, while personal brokerage exports should stay
 local and untracked.
 
+## Quick Start
+
+### Use the skills in your own agent
+
+This is the recommended path if you want an LLM or coding agent to run the XTB
+workflows for you. Give your agent access to this repository and ask it to
+follow [`INSTALL_FOR_AGENTS.md`](INSTALL_FOR_AGENTS.md). That file tells the
+agent how to install or use the portable skill folders, validate them, and run
+the right workflow for your XTB workbook.
+
+Install prompt:
+
+```text
+Read https://github.com/farcasclaudiu/xtb-investment-tools/blob/main/INSTALL_FOR_AGENTS.md and install the XTB skills for your agent harness.
+```
+
+Portfolio review prompt examples:
+
+```text
+Use the XTB portfolio review skill to generate and verify a report for my XTB
+workbook.
+```
+
+```text
+Use the XTB portfolio review skill to generate the HTML report, export the CSV
+tables, and summarize the reconciliation status and data-quality caveats.
+```
+
+```text
+Use the XTB portfolio review skill with EUR_demo_report.xlsx as the input file.
+Generate the review, run validation, and report the generated output paths.
+```
+
+Wealthfolio export prompt examples:
+
+```text
+Use the XTB Wealthfolio export skill to create and validate a Wealthfolio CSV
+from my XTB workbook.
+```
+
+```text
+Use the XTB Wealthfolio export skill to inspect the generated CSV rows and tell
+me whether they are ready to import into Wealthfolio.
+```
+
+```text
+Use the XTB Wealthfolio export skill with EUR_demo_report.xlsx as the input file
+and write the Wealthfolio CSV to results/EUR_demo_report_wealthfolio.csv.
+```
+
+### Run the tools directly
+
+From the repository root:
+
+```bash
+python3 -m venv .venv
+.venv/bin/python -m pip install --upgrade pip
+.venv/bin/python -m pip install -r requirements.txt
+
+.venv/bin/python main.py path/to/xtb-report.xlsx
+.venv/bin/python exporter.py path/to/xtb-report.xlsx
+```
+
+Outputs are written to `results/`, including
+`results/<stem>_review.html` for the portfolio review and
+`results/<stem>_wealthfolio.csv` for the Wealthfolio import file. If there is
+exactly one `.xlsx` file in the current folder, both tools can auto-detect it
+when the path is omitted. Add `--csv` to the portfolio review command only when
+you want the extra per-section CSV exports.
+
 ---
 
 ## Background: the XTB export format
