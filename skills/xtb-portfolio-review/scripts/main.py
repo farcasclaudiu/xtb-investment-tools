@@ -1,6 +1,7 @@
 import argparse
 import contextlib
 import io
+import json
 import re
 import warnings
 from dataclasses import dataclass, field
@@ -67,20 +68,27 @@ WITHDRAW_RE = re.compile(r"withdraw|withdrawal|payout", re.IGNORECASE)
 CONVERSION_RE = re.compile(r"currency\s*conversion|conversion\s*fee|fx", re.IGNORECASE)
 
 
-def resolve_report_file(path: Path | str | None = None) -> Path:
+def resolve_report_file(path: Path | str | None = None, *, auto_detect: bool = False) -> Path:
     """Resolve the XTB report file to process.
 
-    Preference:
-      1. An explicit ``path`` (from the CLI or a library call).
-      2. The single ``.xlsx`` in the current working directory (auto-detect),
-         skipping Excel lock files (``~$...``) and dotfiles.
+    Prefer an explicit ``path`` (from the CLI or a library call). Auto-detection
+    of the single ``.xlsx`` in the current working directory is available only
+    when ``auto_detect`` is true, skipping Excel lock files (``~$...``) and
+    dotfiles.
 
-    Raises FileNotFoundError when there is no candidate and ValueError when
-    several candidates make the choice ambiguous. Works with any same-format
-    XTB export regardless of account or period.
+    Raises FileNotFoundError when there is no explicit path and auto-detection
+    is not enabled, or when there is no auto-detect candidate. Raises ValueError
+    when several auto-detect candidates make the choice ambiguous. Works with
+    any same-format XTB export regardless of account or period.
     """
     if path is not None:
         return Path(path)
+    if not auto_detect:
+        raise FileNotFoundError(
+            "No .xlsx report path was provided. Pass it explicitly, e.g.: "
+            "python main.py <report.xlsx>, or use --auto-detect to process "
+            "the single .xlsx in the current directory."
+        )
 
     candidates = [
         p for p in sorted(Path.cwd().glob("*.xlsx"))
@@ -2119,6 +2127,71 @@ def write_html_report(html: str, path: Path | str | None = None) -> Path:
     return path
 
 
+def _json_number(value: object) -> float:
+    try:
+        return round(float(value), 6)
+    except (TypeError, ValueError):
+        return 0.0
+
+
+def write_summary_json(
+    currency: str,
+    flows: dict[str, float],
+    perf: dict[str, float],
+    holdings: pd.DataFrame,
+    as_of: date,
+    cost_fallback_tickers: list[str],
+    review_path: Path | str,
+) -> Path:
+    """Write a bounded summary for agents to inspect before raw report text.
+
+    The summary intentionally excludes free-text workbook fields such as
+    comments and instrument names. Tickers are retained as portfolio identifiers;
+    numeric metrics are rounded for stable, compact output.
+    """
+    top_holdings = []
+    if not holdings.empty:
+        fields = ["ticker", "shares", "market_value", "unrealized_pl", "weight_pct"]
+        available = [field for field in fields if field in holdings.columns]
+        top = holdings.sort_values("weight_pct", ascending=False).head(10)
+        for row in top[available].to_dict(orient="records"):
+            top_holdings.append({
+                "ticker": str(row.get("ticker", "")),
+                "shares": _json_number(row.get("shares")),
+                "market_value": _json_number(row.get("market_value")),
+                "unrealized_pl": _json_number(row.get("unrealized_pl")),
+                "weight_pct": _json_number(row.get("weight_pct")),
+            })
+
+    summary = {
+        "currency": currency,
+        "valuation_as_of": as_of.isoformat(),
+        "review_path": str(review_path),
+        "cash_reconciliation": {
+            "ending_cash": _json_number(perf.get("ending_cash")),
+            "broker_total": _json_number(perf.get("broker_total")),
+            "difference": _json_number(perf.get("reconciliation_diff")),
+        },
+        "performance": {
+            "portfolio_value": _json_number(perf.get("portfolio_value")),
+            "net_deposited": _json_number(perf.get("net_deposited")),
+            "total_gain": _json_number(perf.get("total_gain")),
+            "total_return_pct": _json_number(perf.get("total_return_pct")),
+            "income_yield_pct": _json_number(perf.get("income_yield_pct")),
+        },
+        "cash_flows": {
+            key: _json_number(flows.get(key))
+            for key in ("deposits", "withdrawals", "buys", "sells", "dividends", "taxes")
+        },
+        "top_holdings": top_holdings,
+        "cost_fallback_tickers": [str(ticker) for ticker in cost_fallback_tickers],
+    }
+    path = _output_name("summary", "json")
+    path.parent.mkdir(parents=True, exist_ok=True)
+    path.write_text(json.dumps(summary, indent=2, sort_keys=True), encoding="utf-8")
+    return path
+
+
 def _persist_outputs(
     holdings: pd.DataFrame,
     open_positions: pd.DataFrame,
@@ -2154,10 +2227,13 @@ def _persist_outputs(
 
 
 def main(
-    xlsx_path: Path | str | None = None, write_csv: bool = False
+    xlsx_path: Path | str | None = None,
+    write_csv: bool = False,
+    *,
+    auto_detect: bool = False,
 ) -> None:
     global REPORT_FILE
-    REPORT_FILE = resolve_report_file(xlsx_path)
+    REPORT_FILE = resolve_report_file(xlsx_path, auto_detect=auto_detect)
     RESULTS_DIR.mkdir(parents=True, exist_ok=True)
     currency = detect_currency()
     meta = load_meta()
@@ -2222,7 +2298,11 @@ def main(
         as_of=as_of, cost_fallback_tickers=cost_fallback_tickers,
     )
     out = write_html_report(html)
+    summary_out = write_summary_json(
+        currency, flows, perf, valued_holdings, as_of, cost_fallback_tickers, out
+    )
     print(f"HTML report written to {out}")
+    print(f"Summary written to {summary_out}")
 
 
 def main_cli() -> None:
@@ -2231,8 +2311,12 @@ def main_cli() -> None:
     )
     parser.add_argument(
         "input", nargs="?", default=None,
-        help="Path to the XTB .xlsx report. If omitted, the single .xlsx in "
-             "the current directory is used automatically.",
+        help="Path to the XTB .xlsx report.",
+    )
+    parser.add_argument(
+        "--auto-detect", action="store_true",
+        help="Process the single non-lock .xlsx in the current directory when "
+             "no explicit input path is provided.",
     )
     parser.add_argument(
         "--csv", action="store_true",
@@ -2241,7 +2325,7 @@ def main_cli() -> None:
     )
     args = parser.parse_args()
     try:
-        main(args.input, write_csv=args.csv)
+        main(args.input, write_csv=args.csv, auto_detect=args.auto_detect)
     except (FileNotFoundError, ValueError) as exc:
         parser.error(str(exc))
 

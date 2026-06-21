@@ -101,14 +101,15 @@ python3 -m venv .venv
 ```
 
 Outputs are written to `results/`, including
-`results/<stem>_review.html` for the portfolio review and
+`results/<stem>_review.html` and `results/<stem>_summary.json` for the portfolio review and
 `results/<stem>_wealthfolio.csv` for the Wealthfolio import file. The Portfolio
 Performance exporter writes
 `results/<stem>_portfolio_performance_portfolio_transactions.csv` and
-`results/<stem>_portfolio_performance_account_transactions.csv`. If there is
-exactly one `.xlsx` file in the current folder, the tools can auto-detect it
-when the path is omitted. Add `--csv` to the portfolio review command only when
-you want the extra per-section CSV exports.
+`results/<stem>_portfolio_performance_account_transactions.csv`. Pass the XTB
+workbook path explicitly for the portfolio review; use `--auto-detect` only
+when you intentionally want to process the single `.xlsx` in the current folder.
+Add `--csv` to the portfolio review command only when you want the extra
+per-section CSV exports.
 
 ---
 
@@ -242,19 +243,22 @@ skills/xtb-portfolio-performance-export/scripts/setup-env.sh
 ### Generate the portfolio review
 
 ```bash
-.venv/bin/python main.py                                          # auto-detects the only .xlsx in the folder
-.venv/bin/python main.py EUR_demo_report.xlsx                 # explicit report
-.venv/bin/python main.py --csv                                    # also write the CSV outputs
+.venv/bin/python main.py EUR_demo_report.xlsx                     # explicit report
+.venv/bin/python main.py EUR_demo_report.xlsx --csv               # also write the CSV outputs
+.venv/bin/python main.py --auto-detect                            # intentionally use the only .xlsx in the folder
 ```
 
 By default only the self-contained **HTML report** (with inline interactive
-charts and table tools) is written to `results/`. Pass `--csv` to additionally
-export the per-section CSVs (holdings, cash flows, performance, …).
+charts and table tools) plus a bounded **summary JSON** are written to
+`results/`. Pass `--csv` to additionally export the per-section CSVs (holdings,
+cash flows, performance, …).
 
-If no path is given and exactly one `.xlsx` is present in the current
-directory, it is used automatically; if there are none or several, pass the
-path explicitly. Any same-format XTB export works — the currency is
-auto-detected from the filename prefix (e.g. `EUR_…`, `USD_…`).
+If no path is given, the portfolio review exits with a prompt to pass the path
+explicitly. `--auto-detect` keeps the older convenience behavior for local use:
+if exactly one `.xlsx` is present in the current directory, it is used; if there
+are none or several, pass the path explicitly. Any same-format XTB export works
+— the currency is auto-detected from the filename prefix (e.g. `EUR_…`,
+`USD_…`).
 
 ### HTML report features
 
