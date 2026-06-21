@@ -1546,6 +1546,40 @@ TERM_TOOLTIPS = {
 }
 
 _TERM_TOOLTIP_SEQ = 0
+_TERM_TOOLTIP_NOTES: list[tuple[int, str, str]] = []
+_TERM_TOOLTIP_NOTE_INDEX: dict[str, int] = {}
+
+
+def _reset_term_tooltips() -> None:
+    global _TERM_TOOLTIP_SEQ
+    _TERM_TOOLTIP_SEQ = 0
+    _TERM_TOOLTIP_NOTES.clear()
+    _TERM_TOOLTIP_NOTE_INDEX.clear()
+
+
+def _term_note_number(text: str, help_text: str) -> int:
+    key = text.strip()
+    note_num = _TERM_TOOLTIP_NOTE_INDEX.get(key)
+    if note_num is None:
+        note_num = len(_TERM_TOOLTIP_NOTES) + 1
+        _TERM_TOOLTIP_NOTE_INDEX[key] = note_num
+        _TERM_TOOLTIP_NOTES.append((note_num, text, help_text))
+    return note_num
+
+
+def _tooltip_notes_html() -> str:
+    if not _TERM_TOOLTIP_NOTES:
+        return ""
+    items = "".join(
+        f"<li><strong>{escape(text)}</strong>: {escape(help_text)}</li>"
+        for _, text, help_text in _TERM_TOOLTIP_NOTES
+    )
+    return (
+        "<section class='tooltip-notes' aria-label='Tooltip notes'>"
+        "<h2>Tooltip Notes</h2>"
+        f"<ol>{items}</ol>"
+        "</section>"
+    )
 
 
 def _label_html(label: str) -> str:
@@ -1557,11 +1591,13 @@ def _label_html(label: str) -> str:
     slug = re.sub(r"[^a-z0-9]+", "-", text.strip().lower()).strip("-") or "term"
     _TERM_TOOLTIP_SEQ += 1
     tip_id = f"term-tip-{slug}-{_TERM_TOOLTIP_SEQ}"
+    note_num = _term_note_number(text, help_text)
     return (
         f"<span class='term-help' tabindex='0' "
         f"aria-describedby='{escape(tip_id)}' data-term-help='1'>"
         f"<span class='term-label'>{escape(text)}</span>"
         f"<span class='term-icon' aria-hidden='true'>?</span>"
+        f"<span class='term-note-ref' aria-hidden='true'>[{note_num}]</span>"
         f"<span class='term-tip' id='{escape(tip_id)}' role='tooltip'>"
         f"{escape(help_text)}</span></span>"
     )
@@ -1714,6 +1750,7 @@ def build_html_report(
     as_of: date | None = None,
     cost_fallback_tickers: list[str] | None = None,
 ) -> str:
+    _reset_term_tooltips()
     cost_fallback_tickers = cost_fallback_tickers or []
     diff = perf["reconciliation_diff"]
     recon_status = "OK" if (diff is None or abs(diff) < 0.01) else "CHECK"
@@ -1910,6 +1947,7 @@ def build_html_report(
                       border:6px solid transparent; border-top-color:#111827; }}
   .term-help:hover .term-tip, .term-help:focus .term-tip,
   .term-help:focus-within .term-tip {{ opacity:1; transform:translateY(0); }}
+  .term-note-ref, .tooltip-notes {{ display:none; }}
   .section-nav {{ position:sticky; top:0; z-index:10; display:flex; gap:8px; flex-wrap:wrap;
                   align-items:center; background:rgba(245,246,248,.96); border:1px solid var(--line);
                   border-radius:10px; padding:10px; margin:-8px 0 18px; backdrop-filter:blur(8px); }}
@@ -1931,6 +1969,18 @@ def build_html_report(
     table {{ page-break-inside:auto; }}
     tr {{ break-inside:avoid; page-break-inside:avoid; }}
     a {{ color:inherit; text-decoration:none; }}
+    .term-help {{ display:inline; border-bottom:0; cursor:default; }}
+    .term-icon {{ display:none; }}
+    .term-note-ref {{ display:inline; color:#4b5563; font-size:.78em;
+                      vertical-align:super; margin-left:1px; }}
+    .term-tip {{ display:none; }}
+    .term-tip::after {{ content:none; }}
+    .tooltip-notes {{ display:block; margin-top:18px; padding-top:12px;
+                      border-top:1px solid #d1d5db; color:#374151;
+                      break-inside:avoid; page-break-inside:avoid; }}
+    .tooltip-notes h2 {{ color:#374151; }}
+    .tooltip-notes ol {{ margin:0; padding-left:20px; }}
+    .tooltip-notes li {{ margin:0 0 5px; font-size:12px; line-height:1.35; }}
   }}
 </style>
 </head>
@@ -2025,6 +2075,8 @@ def build_html_report(
       <p class="muted">XTB "Total" row reflects ending free cash; reconciled against computed cash balance.</p>
     </div>
   </div>
+
+  {_tooltip_notes_html()}
 
   <footer>Generated from {escape(REPORT_FILE.name)} on {escape(datetime.now().strftime('%Y-%m-%d %H:%M:%S'))} · live prices via yfinance (as of {escape(val_date)}){' · priced at cost: ' + escape(', '.join(cost_fallback_tickers)) if cost_fallback_tickers else ''}{'<br>' + '<br>'.join(escape(f'{t}: {COST_FALLBACK_NOTES[t]}') for t in cost_fallback_tickers if t in COST_FALLBACK_NOTES) if any(t in COST_FALLBACK_NOTES for t in cost_fallback_tickers) else ''}</footer>
 </div>

@@ -1133,6 +1133,35 @@ class TestHtmlReport:
         assert "break-inside:avoid" in html
         assert "box-shadow:none" in html
 
+    def test_print_styles_turn_tooltips_into_pdf_footnotes(self):
+        holdings = pd.DataFrame(
+            {"ticker": ["A"], "name": ["Alpha"], "shares": [10],
+             "avg_price": [100.0], "cost_basis": [1000.0],
+             "allocation_pct": [100.0], "last_price": [110.0],
+             "market_value": [1100.0], "unrealized_pl": [100.0],
+             "return_pct": [10.0], "weight_pct": [100.0],
+             "price_source": ["live"]}
+        )
+        flows = {"deposits": 1000.0, "withdrawals": 0.0, "interest": 0.0,
+                 "dividends": 0.0, "dividend_tax": 0.0, "conversion_fees": 0.0,
+                 "invested": 1000.0, "proceeds": 0.0, "fees": 0.0}
+        review_cfg = main.html_charts.review_charts_config(
+            holdings, flows, pd.Series(dtype=float), "EUR")
+        html = main.build_html_report(
+            "EUR", {"account": "1", "period_from": "x", "period_to": "y"},
+            flows, 0.0, holdings,
+            pd.DataFrame(columns=["ticker", "current_value", "unrealized_pl"]),
+            pd.DataFrame(columns=["ticker", "realized_pl"]),
+            self._minimal_perf(), None, review_cfg,
+        )
+        assert "class='term-note-ref' aria-hidden='true'>[1]</span>" in html
+        assert "<section class='tooltip-notes' aria-label='Tooltip notes'>" in html
+        assert "<h2>Tooltip Notes</h2>" in html
+        assert "<li><strong>Portfolio value</strong>: What your portfolio is worth" in html
+        assert ".tooltip-notes { display:block;" in html
+        assert ".term-tip { display:none;" in html
+        assert ".term-icon { display:none;" in html
+
     def test_html_includes_finance_term_tooltips(self):
         holdings = pd.DataFrame(
             {"ticker": ["A"], "name": ["Alpha"], "shares": [10],
