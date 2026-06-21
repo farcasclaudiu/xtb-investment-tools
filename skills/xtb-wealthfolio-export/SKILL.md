@@ -1,6 +1,6 @@
 ---
 name: xtb-wealthfolio-export
-description: Use when converting XTB brokerage .xlsx exports to Wealthfolio-compatible CSV, validating Wealthfolio import rows, checking transaction activity mappings, or debugging exporter.py output.
+description: Use when converting XTB brokerage .xlsx exports to Wealthfolio-compatible CSV imports, validating brokerage export rows, checking transaction activity mappings, reviewing trade/dividend/cash classifications, or debugging exporter.py output.
 ---
 
 # XTB Wealthfolio Export

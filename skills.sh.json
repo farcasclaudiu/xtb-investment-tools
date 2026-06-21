@@ -1,0 +1,14 @@
+{
+  "$schema": "https://skills.sh/schemas/skills.sh.schema.json",
+  "notGrouped": "bottom",
+  "groupings": [
+    {
+      "title": "XTB Tools",
+      "description": "Skills for analyzing XTB brokerage exports and preparing Wealthfolio imports.",
+      "skills": [
+        "xtb-portfolio-review",
+        "xtb-wealthfolio-export"
+      ]
+    }
+  ]
+}
