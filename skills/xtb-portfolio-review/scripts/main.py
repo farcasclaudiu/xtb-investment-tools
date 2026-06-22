@@ -19,6 +19,7 @@ OPEN_POSITIONS_SHEET = "Open Positions"
 CASH_SHEET = "Cash Operations"
 HEADER_ROW = 4
 RESULTS_DIR = Path("results")
+DEFAULT_EMBEDDED_FX_FEE_RATE = 0.005
 
 # XTB ticker codes that don't resolve on Yahoo → verified same-fund Yahoo symbols.
 # Only add mappings confirmed to be the SAME fund (same ISIN/share class), never a
@@ -65,7 +66,15 @@ DIVIDEND_TAX_RE = re.compile(r"dividend\s*tax|tax.*dividend|withholding", re.IGN
 INTEREST_RE = re.compile(r"interest|free.?funds", re.IGNORECASE)
 DEPOSIT_RE = re.compile(r"deposit|top.?up|deposit.?funds", re.IGNORECASE)
 WITHDRAW_RE = re.compile(r"withdraw|withdrawal|payout", re.IGNORECASE)
-CONVERSION_RE = re.compile(r"currency\s*conversion|conversion\s*fee|fx", re.IGNORECASE)
+CURRENCY_CONVERSION_RE = re.compile(r"currency\s*conversion", re.IGNORECASE)
+CONVERSION_FEE_RE = re.compile(
+    r"(conversion|fx).*(fee|commission)|fee.*(conversion|fx)|\bfx\b",
+    re.IGNORECASE,
+)
+CONVERSION_RE = re.compile(
+    r"currency\s*conversion|conversion\s*fee|fx",
+    re.IGNORECASE,
+)
 
 
 def resolve_report_file(path: Path | str | None = None, *, auto_detect: bool = False) -> Path:
@@ -732,7 +741,9 @@ def analyze_cash_flows(
         "interest": 0.0,
         "dividends": 0.0,
         "dividend_tax": 0.0,
+        "currency_conversions": 0.0,
         "conversion_fees": 0.0,
+        "estimated_embedded_fx_fees": 0.0,
         "invested": 0.0,
         "proceeds": 0.0,
         "fees": 0.0,
@@ -761,8 +772,13 @@ def analyze_cash_flows(
                 flows["dividends"] += amount
             elif INTEREST_RE.search(text):
                 flows["interest"] += amount
-            elif CONVERSION_RE.search(text):
+            elif CONVERSION_FEE_RE.search(text):
                 flows["conversion_fees"] += amount
+            elif CURRENCY_CONVERSION_RE.search(text):
+                flows["currency_conversions"] += amount
+                flows["estimated_embedded_fx_fees"] += (
+                    abs(amount) * DEFAULT_EMBEDDED_FX_FEE_RATE
+                )
             elif WITHDRAW_RE.search(text):
                 flows["withdrawals"] += abs(amount)
             elif DEPOSIT_RE.search(text):
@@ -781,7 +797,11 @@ def analyze_cash_flows(
             else:
                 flows["invested"] += t.value  # buying to cover
 
-    net_deposited = flows["deposits"] - flows["withdrawals"]
+    net_deposited = (
+        flows["deposits"]
+        + flows.get("currency_conversions", 0.0)
+        - flows["withdrawals"]
+    )
     ending_cash = (
         net_deposited
         + flows["interest"]
@@ -973,6 +993,8 @@ def build_external_cash_flows(
             flows.append((pd.Timestamp(dt).normalize(), -abs(amount)))
         elif WITHDRAW_RE.search(text):
             flows.append((pd.Timestamp(dt).normalize(), abs(amount)))
+        elif CURRENCY_CONVERSION_RE.search(text):
+            flows.append((pd.Timestamp(dt).normalize(), -amount))
 
     if terminal_value > 0:
         flows.append((pd.Timestamp(terminal_date).normalize(), float(terminal_value)))
@@ -1001,7 +1023,11 @@ def compute_performance(
     income = flows["interest"] + flows["dividends"]
 
     portfolio_value = market_value + ending_cash
-    net_deposited = flows["deposits"] - flows["withdrawals"]
+    net_deposited = (
+        flows["deposits"]
+        + flows.get("currency_conversions", 0.0)
+        - flows["withdrawals"]
+    )
     total_gain = unrealized_pl + realized_pl + income
     total_return_pct = (total_gain / net_deposited * 100) if net_deposited else 0.0
     income_yield_pct = (income / cost_basis * 100) if cost_basis else 0.0
@@ -1420,6 +1446,11 @@ def print_report(
     print(f"  Free-funds interest:   {money(flows['interest']):>14}")
     print(f"  Dividends received:    {money(flows['dividends']):>14}")
     print(f"  Dividend tax:         {money(flows['dividend_tax']):>14}")
+    print(f"  Currency conversions: {money(flows.get('currency_conversions', 0.0)):>14}")
+    print(
+        "  Est. embedded FX fee: "
+        f"{money(-flows.get('estimated_embedded_fx_fees', 0.0)):>14}"
+    )
     print(f"  Invested (buys):      {money(-flows['invested']):>14}")
     print(f"  Proceeds (sales):      {money(flows['proceeds']):>14}")
     print(f"  FX conversion fees:   {money(flows['conversion_fees']):>14}")
@@ -1516,14 +1547,16 @@ TERM_TOOLTIPS = {
     "Portfolio value": "What your portfolio is worth after including market value and cash.",
     "Market Value": "Today's estimated value for a holding. If the report cannot find a trusted price, it uses your original cost instead.",
     "market_value": "Market value is today's estimated value for a holding. If no trusted price is found, the report may use cost instead.",
-    "Net deposited": "Total money added to the account minus withdrawals.",
+    "Net deposited": "Total money added to the account, including converted cash credited into this account, minus withdrawals.",
     "Deposits": "Money you added to the brokerage account.",
     "Withdrawals": "Money you took out of the brokerage account.",
     "Free-funds interest": "Small interest paid by the broker on cash that was not invested.",
     "Dividends received": "Cash paid by investments, usually from company profits or fund distributions.",
     "Invested (buys)": "Money spent buying investments. It reduces cash but increases holdings.",
     "Proceeds (sales)": "Money received from selling investments. It increases cash.",
-    "FX conversion fees": "Costs or adjustments from converting between currencies.",
+    "Currency conversions": "Cash credited to or debited from this account after converting another currency. This is funding principal, not a fee.",
+    "FX conversion fees": "Explicit broker costs for currency conversion, when XTB exports them separately from the converted principal.",
+    "Estimated embedded FX cost": "Estimated currency-conversion cost using the default 0.5% XTB rate. It is informational only because this EUR export does not contain a separate fee row.",
     "Fees / commissions": "Broker or transaction costs paid for account activity.",
     "Ending cash balance": "Cash left in the account after all deposits, withdrawals, trades, income, and fees.",
     "Total gain": "Unrealized gains plus realized gains plus income.",
@@ -1786,6 +1819,11 @@ def build_html_report(
         ("Free-funds interest", money(flows["interest"])),
         ("Dividends received", money(flows["dividends"])),
         ("Dividend tax", money(flows["dividend_tax"])),
+        ("Currency conversions", money(flows.get("currency_conversions", 0.0))),
+        (
+            "Estimated embedded FX cost",
+            money(-flows.get("estimated_embedded_fx_fees", 0.0)),
+        ),
         ("Invested (buys)", money(-flows["invested"])),
         ("Proceeds (sales)", money(flows["proceeds"])),
         ("FX conversion fees", money(flows["conversion_fees"])),
@@ -2181,7 +2219,11 @@ def write_summary_json(
         },
         "cash_flows": {
             key: _json_number(flows.get(key))
-            for key in ("deposits", "withdrawals", "buys", "sells", "dividends", "taxes")
+            for key in (
+                "deposits", "withdrawals", "currency_conversions", "interest",
+                "dividends", "dividend_tax", "invested", "proceeds",
+                "conversion_fees", "estimated_embedded_fx_fees", "fees",
+            )
         },
         "top_holdings": top_holdings,
         "cost_fallback_tickers": [str(ticker) for ticker in cost_fallback_tickers],

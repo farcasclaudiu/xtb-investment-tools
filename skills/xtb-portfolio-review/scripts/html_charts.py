@@ -153,15 +153,16 @@ def _cashflows_config(flows: dict[str, float]) -> dict | None:
     if not flows:
         return None
     items = {
-        "Deposits": float(flows["deposits"]),
-        "Withdrawals": -float(flows["withdrawals"]),
-        "Interest": float(flows["interest"]),
-        "Dividends": float(flows["dividends"]),
-        "Div.tax": float(flows["dividend_tax"]),
-        "Invested": -float(flows["invested"]),
-        "Proceeds": float(flows["proceeds"]),
-        "FX fees": float(flows["conversion_fees"]),
-        "Fees": -float(flows["fees"]),
+        "Deposits": float(flows.get("deposits", 0.0)),
+        "Withdrawals": -float(flows.get("withdrawals", 0.0)),
+        "Interest": float(flows.get("interest", 0.0)),
+        "Dividends": float(flows.get("dividends", 0.0)),
+        "Div.tax": float(flows.get("dividend_tax", 0.0)),
+        "Currency conversions": float(flows.get("currency_conversions", 0.0)),
+        "Invested": -float(flows.get("invested", 0.0)),
+        "Proceeds": float(flows.get("proceeds", 0.0)),
+        "FX fees": float(flows.get("conversion_fees", 0.0)),
+        "Fees": -float(flows.get("fees", 0.0)),
     }
     items = {k: v for k, v in items.items() if abs(v) > 1e-9}
     if not items:

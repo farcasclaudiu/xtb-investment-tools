@@ -358,6 +358,26 @@ class TestAnalyzeCashFlows:
         # ending = 1000 - 200 + 0.5 + 10 - 1.5 - 100 + (-2) = 707
         assert ending == pytest.approx(707.0)
 
+    def test_currency_conversion_principal_is_not_an_fx_fee(self):
+        ops = make_cash_ops([
+            cash_row("Deposit", "", 8000.0, "deposit"),
+            cash_row(
+                "Transfer", "", 980.34,
+                "Currency conversion, RON to EUR from TA: 53074242 to: 53143415, "
+                "Exchange rate:0.195505",
+            ),
+            cash_row("Stock purchase", "A", -8891.39, "OPEN BUY 1 @ 8891.39"),
+            cash_row("Free funds interest", "", 1.36, "Free-funds Interest"),
+        ])
+        trades = extract_trades(ops)
+        flows, ending = analyze_cash_flows(ops, trades)
+
+        assert flows["deposits"] == pytest.approx(8000.0)
+        assert flows["currency_conversions"] == pytest.approx(980.34)
+        assert flows["conversion_fees"] == pytest.approx(0.0)
+        assert flows["estimated_embedded_fx_fees"] == pytest.approx(4.9017)
+        assert ending == pytest.approx(90.31)
+
     def test_sale_proceeds(self):
         ops = make_cash_ops([
             cash_row("Stock purchase", "A", -100, "OPEN BUY 1 @ 100.00"),
@@ -472,6 +492,22 @@ class TestComputePerformance:
         perf = compute_performance(holdings, op, realized, flows, 0.0, 0.0)
         assert perf["market_value"] == pytest.approx(1200.0)
         assert perf["total_gain"] == pytest.approx(200 + 50 + 10)
+
+    def test_net_deposited_includes_currency_conversion_principal(self):
+        holdings = pd.DataFrame({"ticker": ["A"], "cost_basis": [8891.39]})
+        op = pd.DataFrame(
+            {"ticker": ["A"], "current_value": [9996.19], "unrealized_pl": [1104.80]}
+        )
+        flows = {
+            "deposits": 8000.0, "withdrawals": 0.0, "interest": 1.36,
+            "dividends": 0.0, "dividend_tax": 0.0, "currency_conversions": 980.34,
+            "conversion_fees": 0.0, "invested": 8891.39, "proceeds": 0.0, "fees": 0.0,
+        }
+
+        perf = compute_performance(holdings, op, pd.DataFrame(), flows, 90.31, 90.31)
+
+        assert perf["net_deposited"] == pytest.approx(8980.34)
+        assert perf["total_return_pct"] == pytest.approx(1106.16 / 8980.34 * 100)
 
 
 # ---------------------------------------------------------------------------
