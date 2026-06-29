@@ -397,13 +397,16 @@ def extract_trades(cash_ops: pd.DataFrame) -> list[Trade]:
 # ---------------------------------------------------------------------------
 # Live market prices (yfinance)
 # ---------------------------------------------------------------------------
-def _parse_as_of(meta: dict[str, str]) -> date:
-    """Valuation date = report 'Date to'. Falls back to today."""
-    raw = meta.get("period_to", "")
-    ts = pd.to_datetime(raw, errors="coerce")
-    if pd.isna(ts):
+def _resolve_as_of(as_of: str | date | None = None) -> date:
+    """Return the valuation date, defaulting to the user's current date."""
+    if as_of is None:
         return date.today()
-    return ts.date()
+    if isinstance(as_of, date):
+        return as_of
+    try:
+        return date.fromisoformat(str(as_of))
+    except ValueError as exc:
+        raise ValueError("--as-of must use YYYY-MM-DD format") from exc
 
 
 def _yf():
@@ -2315,13 +2318,14 @@ def main(
     write_csv: bool = False,
     *,
     auto_detect: bool = False,
+    as_of: str | date | None = None,
 ) -> None:
     global REPORT_FILE
     REPORT_FILE = resolve_report_file(xlsx_path, auto_detect=auto_detect)
     RESULTS_DIR.mkdir(parents=True, exist_ok=True)
     currency = detect_currency()
     meta = load_meta()
-    as_of = _parse_as_of(meta)
+    as_of = _resolve_as_of(as_of)
     positions, cash_ops, open_positions_raw, broker_total = load_data()
 
     trades = extract_trades(cash_ops)
@@ -2407,9 +2411,19 @@ def main_cli() -> None:
         help="Also write CSV outputs (holdings, cash flows, performance, etc.). "
              "By default only the HTML report is written.",
     )
+    parser.add_argument(
+        "--as-of", metavar="YYYY-MM-DD", default=None,
+        help="Valuation date for live prices, XIRR terminal value, and evolution "
+             "charts. Defaults to the current date.",
+    )
     args = parser.parse_args()
     try:
-        main(args.input, write_csv=args.csv, auto_detect=args.auto_detect)
+        main(
+            args.input,
+            write_csv=args.csv,
+            auto_detect=args.auto_detect,
+            as_of=args.as_of,
+        )
     except (FileNotFoundError, ValueError) as exc:
         parser.error(str(exc))
 

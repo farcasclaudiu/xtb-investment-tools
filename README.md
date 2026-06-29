@@ -245,6 +245,7 @@ skills/xtb-portfolio-performance-export/scripts/setup-env.sh
 ```bash
 .venv/bin/python main.py EUR_demo_report.xlsx                     # explicit report
 .venv/bin/python main.py EUR_demo_report.xlsx --csv               # also write the CSV outputs
+.venv/bin/python main.py EUR_demo_report.xlsx --as-of 2026-06-21  # value holdings through a specific date
 .venv/bin/python main.py --auto-detect                            # intentionally use the only .xlsx in the folder
 ```
 
@@ -252,6 +253,10 @@ By default only the self-contained **HTML report** (with inline interactive
 charts and table tools) plus a bounded **summary JSON** are written to
 `results/`. Pass `--csv` to additionally export the per-section CSVs (holdings,
 cash flows, performance, …).
+
+Valuation defaults to the current user date. Pass `--as-of YYYY-MM-DD` when you
+want live prices, XIRR terminal value, and evolution charts computed through a
+specific date instead.
 
 If no path is given, the portfolio review exits with a prompt to pass the path
 explicitly. `--auto-detect` keeps the older convenience behavior for local use:
@@ -349,10 +354,11 @@ so referenced securities exist before dividend rows are processed.
   open leg, so date-ordering is required for correct FIFO lot matching.
 - **Holdings** are the net open lots per ticker at cost basis, with allocation %.
 - **Live market value** is fetched via [`yfinance`](https://github.com/ranaroussi/yfinance)
-  for the last trading day on/before the report's `Date to`. The close is taken in the
-  symbol's native currency and converted to the account currency when needed. Any ticker
-  that can't be priced (delisted / not on Yahoo) falls back to **cost basis** and is
-  flagged `price_source = "cost"` in the holdings CSV and report.
+  for the last trading day on/before the valuation date: the current user date by
+  default, or the date passed with `--as-of YYYY-MM-DD`. The close is taken in the
+  symbol's native currency and converted to the account currency when needed. Any
+  ticker that can't be priced (delisted / not on Yahoo) falls back to **cost basis**
+  and is flagged `price_source = "cost"` in the holdings CSV and report.
 - **Realized P/L** prefers the broker's `Closed Positions` `Profit/Loss` column; when that
   is absent, it falls back to **FIFO lot matching** from CLOSE trades.
 - **Cash flows** are categorized (deposits, withdrawals, interest, dividends, dividend tax,
@@ -418,8 +424,9 @@ Transactions` CSV for cash movements, income, taxes, fees, and transfers.
 ## Notes & limitations
 
 - **Live prices** are daily closes from yfinance, taken for the last trading day on or
-  before the report's `Date to`. A symbol that can't be resolved (e.g. some proprietary
-  XTB instrument codes) is valued at cost and flagged with `price_source = "cost"`.
+  before the valuation date: the current user date by default, or the date passed with
+  `--as-of YYYY-MM-DD`. A symbol that can't be resolved (e.g. some proprietary XTB
+  instrument codes) is valued at cost and flagged with `price_source = "cost"`.
 - **Cost fallback positions** carry zero unrealized P/L in the report, contribution
   table, and evolution chart. The methodology section lists every cost fallback ticker.
 - **Money-weighted return (XIRR)** requires at least one external cash outflow and
