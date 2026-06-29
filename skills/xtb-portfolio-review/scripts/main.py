@@ -2315,18 +2315,13 @@ def main(
     write_csv: bool = False,
     *,
     auto_detect: bool = False,
-    as_of_date: str | None = None,
 ) -> None:
     global REPORT_FILE
     REPORT_FILE = resolve_report_file(xlsx_path, auto_detect=auto_detect)
     RESULTS_DIR.mkdir(parents=True, exist_ok=True)
     currency = detect_currency()
     meta = load_meta()
-    if as_of_date:
-        ts = pd.to_datetime(as_of_date, errors="coerce")
-        as_of = ts.date() if not pd.isna(ts) else _parse_as_of(meta)
-    else:
-        as_of = _parse_as_of(meta)
+    as_of = _parse_as_of(meta)
     positions, cash_ops, open_positions_raw, broker_total = load_data()
 
     trades = extract_trades(cash_ops)
@@ -2412,20 +2407,9 @@ def main_cli() -> None:
         help="Also write CSV outputs (holdings, cash flows, performance, etc.). "
              "By default only the HTML report is written.",
     )
-    parser.add_argument(
-        "--as-of", dest="as_of_date", default=None,
-        help="Valuation date (YYYY-MM-DD). Defaults to the workbook 'Date to'. "
-             "Use 'today' to price at current market.",
-    )
     args = parser.parse_args()
-
-    as_of_date = args.as_of_date
-    if as_of_date and as_of_date.lower() == "today":
-        as_of_date = date.today().isoformat()
-
     try:
-        main(args.input, write_csv=args.csv, auto_detect=args.auto_detect,
-             as_of_date=as_of_date)
+        main(args.input, write_csv=args.csv, auto_detect=args.auto_detect)
     except (FileNotFoundError, ValueError) as exc:
         parser.error(str(exc))
 
