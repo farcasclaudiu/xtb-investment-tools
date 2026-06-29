@@ -1,7 +1,7 @@
 ---
 name: xtb-portfolio-review
 description: Use when analyzing XTB brokerage .xlsx exports, creating investment portfolio analysis reports, generating HTML/CSV outputs, validating cash reconciliation, reviewing holdings, dividends, risk, income, performance, or explaining report outputs from main.py.
-version: 1.0.3
+version: 1.0.4
 ---
 
 # XTB Portfolio Review
