@@ -1,7 +1,7 @@
 ---
 name: xtb-portfolio-review
 description: Use when analyzing XTB brokerage .xlsx exports, creating investment portfolio analysis reports, generating HTML/CSV outputs, validating cash reconciliation, reviewing holdings, dividends, risk, income, performance, or explaining report outputs from main.py.
-version: 1.0.8
+version: 1.0.10
 ---
 
 # XTB Portfolio Review
@@ -20,6 +20,7 @@ In the full repository, see `video/renders/portfolio-review-agents-40s.mp4` for 
 
 - Use the XTB portfolio review skill to analyze `report.xlsx`, generate the HTML report, and validate cash reconciliation.
 - Review my XTB brokerage export and summarize holdings, dividends, performance, income, and risk caveats.
+- Run the XTB portfolio review with live data. I approve sending my portfolio tickers to yfinance/Yahoo Finance for live and historical prices.
 - Generate the portfolio review with CSV exports and tell me whether the broker cash total reconciles.
 - Generate a shareable anonymized portfolio review that hides my absolute numbers.
 
@@ -42,17 +43,28 @@ In the full repository, see `video/renders/portfolio-review-agents-40s.mp4` for 
 
 ## Network / Market Data
 
-The review generator fetches live and historical market prices through `yfinance`
-during the `run-review.sh` command. In sandboxed agent environments, outbound
-HTTPS may be blocked by default, so report generation may need explicit user
-approval or a network-enabled rerun when live valuation matters.
+The review generator can fetch live and historical market prices through
+`yfinance`/Yahoo Finance during the `run-review.sh` command. A plain offline
+review does not require network access and can run without asking for external
+market data approval. If the sandbox/network cannot reach `yfinance`, the
+report still completes with cost pricing fallbacks.
+
+Only request external market-data approval when the user asks for live prices,
+historical market value, live valuation, XIRR terminal value based on market
+prices, or chart validation that depends on live/historical prices. If live data
+is needed but the user has not already approved it, ask before running the
+review so the first run can be network-enabled instead of failing offline first.
+
+Preferred consent wording for future live-price requests:
+
+`Run the XTB portfolio review with live data. I approve sending my portfolio tickers to yfinance/Yahoo Finance for live and historical prices.`
 
 If `yfinance` fails, times out, or returns no usable price, the tool deliberately
 falls back to cost basis and marks those holdings with `price_source = "cost"`
 or `Src = cost`. This is expected offline behavior, not necessarily a data bug.
-When most or all holdings are priced at cost and the user expects live valuation,
-request permission for external market-data access and rerun the same review
-command before concluding that live prices are unavailable.
+When most or all holdings are priced at cost and the user expected live
+valuation, request permission for external market-data access and rerun the
+same review command before concluding that live prices are unavailable.
 
 Do not fetch ad hoc replacement prices with search or browser tools. Let the
 bundled script own price lookup, FX conversion, fallback handling, and summary
@@ -83,3 +95,4 @@ generation.
 - Do not treat the generated report as investment advice; describe what the tool computed and the data-quality limits.
 - Prefer the bundled validation script and generated outputs over eyeballing the HTML alone.
 - Preserve offline/self-contained HTML behavior; do not introduce CDN dependencies when modifying the report.
+- If charts look correct in browser HTML but narrow, stacked, or left-offset in an A4 PDF, treat it as print CSS / Chart.js canvas sizing, not a live-data issue. Instruct the PDF exporter to use about 75-80% scale, or landscape orientation if scale is unavailable, rather than changing report CSS or rerunning live pricing.
