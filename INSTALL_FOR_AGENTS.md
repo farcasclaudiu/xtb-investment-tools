@@ -78,6 +78,13 @@ For Portfolio Performance export:
 
 The setup scripts create or reuse `.venv` in the current working directory. If network access or package installation requires approval, ask before running `setup-env.sh`.
 
+The portfolio review workflow may also need outbound HTTPS during report
+generation, not only during setup. `xtb-portfolio-review/scripts/run-review.sh`
+uses `yfinance` to fetch live and historical Yahoo Finance market data. If an
+agent sandbox blocks that access, the report still completes by pricing affected
+holdings at cost; request network approval and rerun the same review command
+when the user expects live valuation.
+
 ## Use Without Installing
 
 If you cannot copy files, use the skill in place:
@@ -176,6 +183,9 @@ Successful validation means the Python dependencies are importable and the bundl
 - Do not present portfolio output as investment advice. Report computed values, assumptions, and caveats.
 - If dependencies are missing, propose running `scripts/setup-env.sh`.
 - If package installation needs network access or elevated permissions, ask the user first.
+- If portfolio review live pricing is expected, request network approval for
+  `scripts/run-review.sh` when the sandbox blocks `yfinance`/Yahoo Finance
+  market-data requests.
 - If a workbook path is ambiguous, ask the user which `.xlsx` file to use.
 - If validation fails, report the failing command and the actionable error.
 

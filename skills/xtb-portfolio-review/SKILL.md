@@ -1,7 +1,7 @@
 ---
 name: xtb-portfolio-review
 description: Use when analyzing XTB brokerage .xlsx exports, creating investment portfolio analysis reports, generating HTML/CSV outputs, validating cash reconciliation, reviewing holdings, dividends, risk, income, performance, or explaining report outputs from main.py.
-version: 1.0.7
+version: 1.0.8
 ---
 
 # XTB Portfolio Review
@@ -39,6 +39,24 @@ In the full repository, see `video/renders/portfolio-review-agents-40s.mp4` for 
 7. Check whether computed ending cash reconciles to the broker `Total` row within EUR/USD/etc. `0.01`.
 8. Always report pricing coverage from the summary/HTML. If cost fallbacks dominate, explain that valuation and unrealized P/L are conservative/incomplete, cost/value evolution lines may overlap because holdings are cost-priced, and current valuation needs a network-enabled rerun for live prices.
 9. Report findings with caveats: cost-priced tickers, missing live prices, cash mismatch, XIRR availability, concentration, income tax drag, and any generated file paths.
+
+## Network / Market Data
+
+The review generator fetches live and historical market prices through `yfinance`
+during the `run-review.sh` command. In sandboxed agent environments, outbound
+HTTPS may be blocked by default, so report generation may need explicit user
+approval or a network-enabled rerun when live valuation matters.
+
+If `yfinance` fails, times out, or returns no usable price, the tool deliberately
+falls back to cost basis and marks those holdings with `price_source = "cost"`
+or `Src = cost`. This is expected offline behavior, not necessarily a data bug.
+When most or all holdings are priced at cost and the user expects live valuation,
+request permission for external market-data access and rerun the same review
+command before concluding that live prices are unavailable.
+
+Do not fetch ad hoc replacement prices with search or browser tools. Let the
+bundled script own price lookup, FX conversion, fallback handling, and summary
+generation.
 
 ## Bundled Tools
 

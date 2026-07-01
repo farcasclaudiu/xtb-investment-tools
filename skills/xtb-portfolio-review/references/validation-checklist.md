@@ -26,6 +26,9 @@ Load this before saying an XTB portfolio review is ready.
 
 - Check pricing coverage in the summary or HTML, for example `7 live / 0 cost fallbacks`.
 - Treat reports with all or most holdings priced at cost as cash-flow-valid but not live-valued.
+- If live pricing is expected but most or all holdings are priced at cost, rerun
+  the same review command with outbound market-data access approved before
+  concluding that live prices are unavailable.
 - Confirm the summary explicitly lists any cost fallback tickers.
 - Verify that `Portfolio Evolution - Cost vs Value` visually separates when live prices are available.
 - If the chart difference is tiny relative to the main portfolio axis, ensure the report exposes gain/loss clearly, for example through a separate gain/loss series or axis.
