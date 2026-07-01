@@ -1,0 +1,27 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 760 220" role="img" aria-labelledby="title desc">
+  <title id="title">XTB Skills logo, light background</title>
+  <desc id="desc">XTB Skills wordmark with an original X-shaped agent skill network mark for light surfaces.</desc>
+  <defs>
+    <linearGradient id="nodeGradient" x1="48" y1="46" x2="128" y2="134" gradientUnits="userSpaceOnUse">
+      <stop offset="0" stop-color="#f1f4ec"/>
+      <stop offset="1" stop-color="#8aa52a"/>
+    </linearGradient>
+  </defs>
+  <rect width="760" height="220" rx="28" fill="#f7f9fb"/>
+  <g transform="translate(34 30)">
+    <rect width="160" height="160" rx="30" fill="#ffffff" stroke="#dbe2ea"/>
+    <path d="M48 48L112 112M112 48L48 112" fill="none" stroke="#14150f" stroke-width="14" stroke-linecap="round"/>
+    <path d="M52 106L70 95L80 80L94 66L109 55" fill="none" stroke="#8aa52a" stroke-width="7" stroke-linecap="round" stroke-linejoin="round"/>
+    <circle cx="48" cy="48" r="10" fill="#e30613" stroke="url(#nodeGradient)" stroke-width="5"/>
+    <circle cx="112" cy="48" r="10" fill="#e30613" stroke="url(#nodeGradient)" stroke-width="5"/>
+    <circle cx="112" cy="112" r="10" fill="#e30613" stroke="url(#nodeGradient)" stroke-width="5"/>
+    <circle cx="48" cy="112" r="10" fill="#e30613" stroke="url(#nodeGradient)" stroke-width="5"/>
+    <circle cx="80" cy="80" r="13" fill="#8aa52a" stroke="#ffffff" stroke-width="5"/>
+  </g>
+  <g transform="translate(230 68)">
+    <text x="0" y="63" fill="#14150f" font-family="Inter, Arial, sans-serif" font-size="70" font-weight="760" letter-spacing="0">XTB Skills</text>
+    <text x="4" y="106" fill="#5f665d" font-family="IBM Plex Mono, SFMono-Regular, monospace" font-size="20" letter-spacing="1.4">AGENT-READY PORTFOLIO WORKFLOWS</text>
+    <path d="M4 124H342" stroke="#dbe2ea" stroke-width="2"/>
+    <path d="M4 124H158" stroke="#8aa52a" stroke-width="3" stroke-linecap="round"/>
+  </g>
+</svg>

@@ -1,0 +1,1093 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Portfolio Review Skills Promo</title>
+    <style>
+      :root {
+        --graphite: #090a08;
+        --panel: #14150f;
+        --panel-2: #1d1e17;
+        --ink: #f1f4ec;
+        --muted: #8c9288;
+        --signal: #8aa52a;
+        --report: #f7f9fb;
+        --report-card: #ffffff;
+        --navy: #244f86;
+        --line: #dbe2ea;
+        --warning: #e84b3c;
+      }
+
+      * {
+        box-sizing: border-box;
+      }
+
+      html,
+      body {
+        width: 100%;
+        height: 100%;
+        margin: 0;
+        overflow: hidden;
+        background: var(--graphite);
+        font-family: Inter, Arial, sans-serif;
+      }
+
+      [data-composition-id="portfolio-review-promo"] {
+        position: relative;
+        width: 1920px;
+        height: 1080px;
+        overflow: hidden;
+        background: var(--graphite);
+        color: var(--ink);
+      }
+
+      .scene {
+        position: absolute;
+        inset: 0;
+        width: 100%;
+        height: 100%;
+        padding: 72px 86px;
+        display: flex;
+        flex-direction: column;
+      }
+
+      .dark-scene {
+        background:
+          radial-gradient(circle at 72% 26%, rgba(138, 165, 42, 0.22), transparent 34%),
+          linear-gradient(180deg, #090a08 0%, #10120d 100%);
+      }
+
+      .report-scene,
+      .split-scene {
+        background: var(--report);
+        color: #111827;
+      }
+
+      .grain {
+        position: absolute;
+        inset: 0;
+        opacity: 0.22;
+        background-image:
+          linear-gradient(rgba(255, 255, 255, 0.022) 1px, transparent 1px),
+          linear-gradient(90deg, rgba(255, 255, 255, 0.018) 1px, transparent 1px);
+        background-size: 44px 44px;
+        pointer-events: none;
+      }
+
+      .wealthfolio-wrap {
+        position: absolute;
+        inset: 54px 74px;
+        border: 1px solid rgba(241, 244, 236, 0.15);
+        border-radius: 20px;
+        overflow: hidden;
+        box-shadow: 0 36px 90px rgba(0, 0, 0, 0.48);
+        background: #0d0e0b;
+      }
+
+      .wealthfolio-shot {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+        opacity: 0.82;
+        filter: saturate(0.92) contrast(1.06);
+      }
+
+      .wealthfolio-dim {
+        position: absolute;
+        inset: 0;
+        background: linear-gradient(90deg, rgba(9, 10, 8, 0.25), rgba(9, 10, 8, 0.58));
+      }
+
+      .hook-copy {
+        position: relative;
+        width: 780px;
+        margin-top: 142px;
+        margin-left: 74px;
+        z-index: 5;
+      }
+
+      .eyebrow {
+        font: 600 22px/1.2 "IBM Plex Mono", SFMono-Regular, monospace;
+        color: var(--signal);
+        letter-spacing: 0;
+        text-transform: uppercase;
+      }
+
+      h1 {
+        margin: 26px 0 0;
+        font-size: 92px;
+        line-height: 0.98;
+        font-weight: 820;
+        letter-spacing: 0;
+      }
+
+      .subtitle {
+        margin-top: 30px;
+        width: 620px;
+        color: rgba(241, 244, 236, 0.74);
+        font-size: 29px;
+        line-height: 1.34;
+      }
+
+      .signal-card {
+        position: absolute;
+        right: 126px;
+        bottom: 106px;
+        z-index: 5;
+        width: 452px;
+        padding: 24px 28px;
+        border: 1px solid rgba(138, 165, 42, 0.28);
+        border-radius: 16px;
+        background: rgba(20, 21, 15, 0.78);
+        backdrop-filter: blur(12px);
+      }
+
+      .signal-card .label {
+        color: var(--muted);
+        font: 600 18px/1.2 "IBM Plex Mono", SFMono-Regular, monospace;
+      }
+
+      .signal-card .value {
+        margin-top: 10px;
+        color: var(--signal);
+        font-size: 48px;
+        font-weight: 760;
+      }
+
+      .workflow {
+        position: absolute;
+        left: 226px;
+        right: 226px;
+        top: 420px;
+        z-index: 8;
+        display: grid;
+        grid-template-columns: 1fr 120px 1fr 120px 1fr;
+        align-items: center;
+        gap: 24px;
+      }
+
+      .workflow-pill {
+        height: 116px;
+        border-radius: 14px;
+        background: rgba(20, 21, 15, 0.88);
+        border: 1px solid rgba(241, 244, 236, 0.14);
+        display: flex;
+        align-items: center;
+        padding: 0 34px;
+        box-shadow: 0 24px 58px rgba(0, 0, 0, 0.34);
+      }
+
+      .workflow-pill strong {
+        display: block;
+        color: var(--ink);
+        font-size: 28px;
+        line-height: 1.1;
+      }
+
+      .workflow-pill span {
+        display: block;
+        margin-top: 8px;
+        color: var(--muted);
+        font: 500 18px/1.2 "IBM Plex Mono", SFMono-Regular, monospace;
+      }
+
+      .arrow {
+        height: 2px;
+        background: linear-gradient(90deg, transparent, rgba(138, 165, 42, 0.9));
+        position: relative;
+      }
+
+      .arrow::after {
+        content: "";
+        position: absolute;
+        right: 0;
+        top: -6px;
+        width: 12px;
+        height: 12px;
+        border-top: 2px solid rgba(138, 165, 42, 0.9);
+        border-right: 2px solid rgba(138, 165, 42, 0.9);
+        transform: rotate(45deg);
+      }
+
+      .transition-line {
+        position: absolute;
+        left: 172px;
+        right: 172px;
+        top: 548px;
+        z-index: 9;
+        height: 180px;
+        pointer-events: none;
+      }
+
+      .transition-line svg {
+        width: 100%;
+        height: 100%;
+        overflow: visible;
+      }
+
+      .report-content {
+        width: 100%;
+        height: 100%;
+        padding: 66px 86px 70px;
+        display: grid;
+        grid-template-columns: 0.96fr 1.04fr;
+        grid-template-rows: auto auto 1fr;
+        gap: 24px;
+      }
+
+      .report-header {
+        grid-column: 1 / -1;
+        height: 156px;
+        border-radius: 10px;
+        background: linear-gradient(115deg, #2a548b, #2f70b5);
+        color: white;
+        padding: 34px 42px;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        box-shadow: 0 24px 64px rgba(36, 79, 134, 0.18);
+      }
+
+      .report-title {
+        font-size: 54px;
+        font-weight: 800;
+        line-height: 1;
+      }
+
+      .report-meta {
+        margin-top: 14px;
+        color: rgba(255, 255, 255, 0.84);
+        font-size: 21px;
+      }
+
+      .report-badge {
+        padding: 13px 19px;
+        border-radius: 999px;
+        color: #0b5f48;
+        background: #c6f4e4;
+        font-size: 19px;
+        font-weight: 760;
+      }
+
+      .review-spotlight {
+        position: absolute;
+        left: 92px;
+        top: 42px;
+        z-index: 4;
+        display: flex;
+        align-items: center;
+        gap: 12px;
+        padding: 13px 17px;
+        border-radius: 999px;
+        background: rgba(36, 79, 134, 0.1);
+        color: var(--navy);
+        border: 1px solid rgba(36, 79, 134, 0.18);
+        font: 800 17px/1 "IBM Plex Mono", SFMono-Regular, monospace;
+        text-transform: uppercase;
+      }
+
+      .review-spotlight::before {
+        content: "";
+        width: 10px;
+        height: 10px;
+        border-radius: 99px;
+        background: #17a35a;
+        box-shadow: 0 0 0 6px rgba(23, 163, 90, 0.12);
+      }
+
+      .metric-row {
+        grid-column: 1 / -1;
+        display: grid;
+        grid-template-columns: repeat(4, 1fr);
+        gap: 18px;
+      }
+
+      .metric {
+        height: 126px;
+        border: 1px solid var(--line);
+        border-radius: 10px;
+        background: var(--report-card);
+        padding: 25px 28px;
+        box-shadow: 0 18px 44px rgba(28, 48, 76, 0.06);
+      }
+
+      .metric span {
+        display: block;
+        color: #637083;
+        font: 600 20px/1.1 "IBM Plex Mono", SFMono-Regular, monospace;
+        text-transform: uppercase;
+      }
+
+      .metric strong {
+        display: block;
+        margin-top: 16px;
+        color: #111827;
+        font-size: 35px;
+        line-height: 1;
+      }
+
+      .metric.positive strong {
+        color: #17a35a;
+      }
+
+      .proof-grid {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 22px;
+      }
+
+      .proof-panel {
+        min-height: 190px;
+        border: 1px solid var(--line);
+        border-radius: 12px;
+        background: var(--report-card);
+        padding: 20px 24px;
+        box-shadow: 0 18px 44px rgba(28, 48, 76, 0.055);
+      }
+
+      .proof-panel h2 {
+        margin: 0 0 16px;
+        color: var(--navy);
+        font-size: 21px;
+        text-transform: uppercase;
+        letter-spacing: 0;
+      }
+
+      .proof-row {
+        display: flex;
+        justify-content: space-between;
+        gap: 28px;
+        padding: 9px 0;
+        border-bottom: 1px solid #eef2f7;
+        font-size: 19px;
+      }
+
+      .proof-row:last-child {
+        border-bottom: 0;
+      }
+
+      .proof-row span {
+        color: #637083;
+      }
+
+      .proof-row strong {
+        text-align: right;
+        color: #101827;
+      }
+
+      .chart-proof {
+        position: relative;
+        border: 1px solid var(--line);
+        border-radius: 12px;
+        background: var(--report-card);
+        overflow: hidden;
+        box-shadow: 0 28px 70px rgba(28, 48, 76, 0.14);
+        outline: 5px solid rgba(36, 79, 134, 0.07);
+      }
+
+      .chart-proof img {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+        object-position: 50% 0%;
+        opacity: 0.92;
+      }
+
+      .callout {
+        position: absolute;
+        display: flex;
+        align-items: center;
+        gap: 12px;
+        padding: 13px 17px;
+        border-radius: 999px;
+        background: rgba(12, 22, 34, 0.9);
+        color: #fff;
+        box-shadow: 0 18px 42px rgba(12, 22, 34, 0.22);
+        font: 700 19px/1 "IBM Plex Mono", SFMono-Regular, monospace;
+      }
+
+      .callout::before {
+        content: "";
+        width: 10px;
+        height: 10px;
+        border-radius: 99px;
+        background: var(--signal);
+      }
+
+      .callout.ok {
+        left: 1072px;
+        top: 628px;
+      }
+
+      .callout.return {
+        left: 1336px;
+        top: 258px;
+      }
+
+      .callout.risk {
+        left: 1090px;
+        top: 456px;
+      }
+
+      .callout.review {
+        left: 1138px;
+        top: 138px;
+        background: rgba(36, 79, 134, 0.94);
+      }
+
+      .split-content {
+        width: 100%;
+        height: 100%;
+        display: grid;
+        grid-template-columns: 0.88fr 1.12fr;
+        gap: 46px;
+        padding: 64px 82px 156px;
+      }
+
+      .split-card {
+        position: relative;
+        border-radius: 18px;
+        overflow: hidden;
+        border: 1px solid rgba(16, 24, 39, 0.12);
+        box-shadow: 0 30px 70px rgba(19, 35, 54, 0.18);
+        background: #111;
+      }
+
+      .split-card img {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+      }
+
+      .split-card.app img {
+        object-position: 42% center;
+      }
+
+      .split-card.report img {
+        object-position: top center;
+      }
+
+      .final-copy {
+        position: absolute;
+        inset: auto 150px 104px 120px;
+        z-index: 12;
+        padding: 22px 32px;
+        border-radius: 18px;
+        background: rgba(9, 10, 8, 0.82);
+        border: 1px solid rgba(241, 244, 236, 0.16);
+        color: var(--ink);
+        display: grid;
+        grid-template-columns: 1fr auto;
+        gap: 34px;
+        align-items: center;
+      }
+
+      .final-copy h2 {
+        margin: 0;
+        font-size: 44px;
+        line-height: 1;
+      }
+
+      .final-copy p {
+        margin: 9px 0 0;
+        color: rgba(241, 244, 236, 0.72);
+        font-size: 22px;
+      }
+
+      .final-brand {
+        display: flex;
+        align-items: center;
+        gap: 18px;
+        min-width: 0;
+      }
+
+      .final-brand img {
+        width: 68px;
+        height: 68px;
+        display: block;
+        border-radius: 14px;
+        flex: 0 0 auto;
+      }
+
+      .export-note {
+        margin-top: 10px;
+        color: #dbeab0;
+        font: 700 16px/1.25 "IBM Plex Mono", SFMono-Regular, monospace;
+      }
+
+      .checks {
+        display: flex;
+        gap: 14px;
+        flex-wrap: wrap;
+        justify-content: flex-end;
+      }
+
+      .check {
+        padding: 13px 16px;
+        border-radius: 999px;
+        background: rgba(138, 165, 42, 0.18);
+        color: #dbeab0;
+        font: 700 16px/1 "IBM Plex Mono", SFMono-Regular, monospace;
+      }
+
+      .agent-scene {
+        background:
+          radial-gradient(circle at 78% 32%, rgba(138, 165, 42, 0.2), transparent 30%),
+          linear-gradient(180deg, #090a08 0%, #11130e 100%);
+        color: var(--ink);
+      }
+
+      .agent-content {
+        position: relative;
+        z-index: 4;
+        width: 100%;
+        height: 100%;
+        display: grid;
+        grid-template-columns: 0.88fr 1.12fr;
+        gap: 62px;
+        align-items: center;
+        padding: 58px 72px 70px;
+      }
+
+      .agent-copy {
+        max-width: 700px;
+      }
+
+      .agent-copy h2 {
+        margin: 28px 0 0;
+        font-size: 70px;
+        line-height: 1;
+        font-weight: 820;
+        letter-spacing: 0;
+      }
+
+      .agent-copy p {
+        margin: 28px 0 0;
+        color: rgba(241, 244, 236, 0.74);
+        font-size: 28px;
+        line-height: 1.35;
+      }
+
+      .agent-tags {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 12px;
+        margin-top: 34px;
+      }
+
+      .agent-tag {
+        padding: 14px 17px;
+        border: 1px solid rgba(138, 165, 42, 0.28);
+        border-radius: 999px;
+        background: rgba(138, 165, 42, 0.13);
+        color: #dbeab0;
+        font: 700 16px/1 "IBM Plex Mono", SFMono-Regular, monospace;
+      }
+
+      .agent-board {
+        position: relative;
+        min-height: 700px;
+        border: 1px solid rgba(241, 244, 236, 0.14);
+        border-radius: 18px;
+        background: rgba(20, 21, 15, 0.82);
+        box-shadow: 0 36px 90px rgba(0, 0, 0, 0.34);
+        overflow: hidden;
+      }
+
+      .agent-board-title {
+        position: absolute;
+        left: 36px;
+        top: 32px;
+        z-index: 5;
+        color: rgba(241, 244, 236, 0.78);
+        font: 700 18px/1 "IBM Plex Mono", SFMono-Regular, monospace;
+        text-transform: uppercase;
+      }
+
+      .skill-core {
+        position: absolute;
+        left: 50%;
+        top: 50%;
+        z-index: 5;
+        width: 270px;
+        height: 270px;
+        transform: translate(-50%, -50%);
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        gap: 12px;
+        border: 1px solid rgba(138, 165, 42, 0.45);
+        border-radius: 24px;
+        background: #090a08;
+        box-shadow: 0 28px 72px rgba(0, 0, 0, 0.38);
+      }
+
+      .skill-core strong {
+        font-size: 39px;
+        line-height: 1;
+      }
+
+      .skill-core span {
+        color: var(--signal);
+        font: 700 16px/1.2 "IBM Plex Mono", SFMono-Regular, monospace;
+        text-transform: uppercase;
+      }
+
+      .skill-core img {
+        width: 86px;
+        height: 86px;
+        display: block;
+      }
+
+      .agent-line {
+        position: absolute;
+        left: 50%;
+        top: 50%;
+        z-index: 1;
+        width: 390px;
+        height: 3px;
+        background: linear-gradient(90deg, var(--signal), rgba(138, 165, 42, 0));
+        transform-origin: 0 50%;
+        opacity: 0.72;
+      }
+
+      .agent-line.openclaw { transform: rotate(-150deg) scaleX(0); }
+      .agent-line.hermes { transform: rotate(-38deg) scaleX(0); }
+      .agent-line.codex { transform: rotate(12deg) scaleX(0); }
+      .agent-line.claude { transform: rotate(136deg) scaleX(0); }
+      .agent-line.gemini { transform: rotate(76deg) scaleX(0); }
+
+      .agent-card {
+        position: absolute;
+        z-index: 4;
+        width: 270px;
+        min-height: 132px;
+        padding: 20px;
+        display: grid;
+        grid-template-columns: 62px 1fr;
+        gap: 16px;
+        align-items: center;
+        border: 1px solid rgba(241, 244, 236, 0.14);
+        border-radius: 16px;
+        background: rgba(29, 30, 23, 0.94);
+        box-shadow: 0 24px 58px rgba(0, 0, 0, 0.32);
+      }
+
+      .agent-card.openclaw { left: 58px; top: 128px; }
+      .agent-card.hermes { right: 88px; top: 94px; }
+      .agent-card.codex { right: 52px; top: 354px; }
+      .agent-card.claude { left: 108px; bottom: 74px; }
+      .agent-card.gemini { left: 360px; bottom: 44px; }
+
+      .agent-icon {
+        width: 62px;
+        height: 62px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        border-radius: 16px;
+        color: white;
+        font-size: 24px;
+        font-weight: 820;
+        overflow: hidden;
+      }
+
+      .agent-icon img {
+        display: block;
+        width: 48px;
+        height: 48px;
+        object-fit: contain;
+      }
+
+      .openclaw .agent-icon,
+      .hermes .agent-icon,
+      .codex .agent-icon,
+      .claude .agent-icon,
+      .gemini .agent-icon {
+        background: #f7f9fb;
+        border: 1px solid rgba(241, 244, 236, 0.18);
+      }
+
+      .agent-name {
+        display: block;
+        font-size: 25px;
+        line-height: 1.05;
+        font-weight: 800;
+      }
+
+      .agent-maker {
+        display: block;
+        margin-top: 8px;
+        color: var(--muted);
+        font: 700 15px/1.2 "IBM Plex Mono", SFMono-Regular, monospace;
+        text-transform: uppercase;
+      }
+
+      .preview-audio-button {
+        position: absolute;
+        right: 34px;
+        top: 34px;
+        z-index: 30;
+        display: none;
+        align-items: center;
+        gap: 10px;
+        padding: 14px 18px;
+        border: 1px solid rgba(241, 244, 236, 0.18);
+        border-radius: 999px;
+        background: rgba(9, 10, 8, 0.78);
+        color: var(--ink);
+        box-shadow: 0 18px 42px rgba(0, 0, 0, 0.28);
+        font: 700 16px/1 "IBM Plex Mono", SFMono-Regular, monospace;
+        cursor: pointer;
+      }
+
+      .preview-audio-button::before {
+        content: "";
+        width: 10px;
+        height: 10px;
+        border-radius: 99px;
+        background: var(--signal);
+      }
+    </style>
+  </head>
+  <body>
+    <div
+      data-composition-id="portfolio-review-promo"
+      data-start="0"
+      data-width="1920"
+      data-height="1080"
+      data-duration="40"
+    >
+      <audio
+        id="background-music"
+        data-start="0"
+        data-duration="40"
+        data-track-index="9"
+        data-volume="1"
+        src="assets/background-soft-lounge-40s.mp3"
+        preload="auto"
+      ></audio>
+
+      <audio
+        id="narration-audio"
+        data-start="0.55"
+        data-duration="37.88"
+        data-track-index="10"
+        data-volume="1"
+        src="assets/narration.mp3"
+        preload="auto"
+      ></audio>
+
+      <section class="scene dark-scene" id="scene-dark">
+        <div class="grain" data-layout-ignore></div>
+        <div class="wealthfolio-wrap" data-layout-allow-overflow>
+          <img class="wealthfolio-shot" src="assets/wealthfolio.png" alt="" />
+          <div class="wealthfolio-dim"></div>
+        </div>
+        <div class="hook-copy">
+          <div class="eyebrow">XTB Portfolio Review Skills</div>
+          <h1>A portfolio is not a spreadsheet.</h1>
+          <div class="subtitle">Broker data becomes a clean Wealthfolio import, then a structured review you can actually use.</div>
+        </div>
+        <div class="signal-card">
+          <div class="label">REVIEW SIGNAL</div>
+          <div class="value">+12.24%</div>
+        </div>
+      </section>
+
+      <section class="scene dark-scene" id="scene-flow">
+        <div class="grain" data-layout-ignore></div>
+        <div class="wealthfolio-wrap" data-layout-allow-overflow>
+          <img class="wealthfolio-shot" src="assets/wealthfolio.png" alt="" />
+          <div class="wealthfolio-dim"></div>
+        </div>
+        <div class="workflow">
+          <div class="workflow-pill">
+            <div>
+              <strong>XTB export</strong>
+              <span>raw transactions</span>
+            </div>
+          </div>
+          <div class="arrow"></div>
+          <div class="workflow-pill">
+            <div>
+              <strong>Wealthfolio import</strong>
+              <span>clean positions</span>
+            </div>
+          </div>
+          <div class="arrow"></div>
+          <div class="workflow-pill">
+            <div>
+              <strong>Portfolio review</strong>
+              <span>decision evidence</span>
+            </div>
+          </div>
+        </div>
+        <div class="transition-line">
+          <svg viewBox="0 0 1500 180" aria-hidden="true">
+            <path
+              id="signal-path"
+              d="M0,128 L75,122 L75,101 L180,100 L180,72 L300,72 L300,56 L450,56 L450,58 L620,55 L620,30 L820,30 L820,52 L970,48 L970,36 L1130,34 L1130,28 L1320,22 L1320,18 L1500,20"
+              fill="none"
+              stroke="#8aa52a"
+              stroke-width="4"
+              stroke-linecap="round"
+              stroke-linejoin="round"
+            />
+          </svg>
+        </div>
+      </section>
+
+      <section class="scene report-scene" id="scene-report">
+        <div class="review-spotlight">Review report is the product</div>
+        <div class="report-content">
+          <div class="report-header">
+            <div>
+              <div class="report-title">Portfolio Review</div>
+              <div class="report-meta">Generated from imported broker data - valuation, risk, cash flow, and data quality checks.</div>
+            </div>
+            <div class="report-badge">Review-ready</div>
+          </div>
+
+          <div class="metric-row">
+            <div class="metric">
+              <span>Portfolio value</span>
+              <strong>100.00 index</strong>
+            </div>
+            <div class="metric">
+              <span>Net deposited</span>
+              <strong>89.10 index</strong>
+            </div>
+            <div class="metric positive">
+              <span>Total gain</span>
+              <strong>10.90 index</strong>
+            </div>
+            <div class="metric positive">
+              <span>Total return</span>
+              <strong>+12.24%</strong>
+            </div>
+          </div>
+
+          <div class="proof-grid">
+            <div class="proof-panel">
+              <h2>Executive Summary</h2>
+              <div class="proof-row"><span>Largest holding</span><strong>IS3N.DE (25.43%)</strong></div>
+              <div class="proof-row"><span>Pricing warnings</span><strong>No cost-pricing fallbacks</strong></div>
+              <div class="proof-row"><span>Reconciliation</span><strong>OK</strong></div>
+            </div>
+            <div class="proof-panel">
+              <h2>Concentration & Risk</h2>
+              <div class="proof-row"><span>Top 1 holding weight</span><strong>25.43%</strong></div>
+              <div class="proof-row"><span>Top 3 holdings weight</span><strong>66.45%</strong></div>
+              <div class="proof-row"><span>Cash allocation</span><strong>0.53%</strong></div>
+            </div>
+            <div class="proof-panel">
+              <h2>Methodology & Data Quality</h2>
+              <div class="proof-row"><span>Pricing coverage</span><strong>7 live / 0 cost fallbacks</strong></div>
+              <div class="proof-row"><span>Cash reconciliation</span><strong>OK</strong></div>
+              <div class="proof-row"><span>Valuation caveat</span><strong>Visible</strong></div>
+            </div>
+            <div class="proof-panel">
+              <h2>Income Quality</h2>
+              <div class="proof-row"><span>Gross income</span><strong>0.03 index</strong></div>
+              <div class="proof-row"><span>Net income yield</span><strong>0.03%</strong></div>
+              <div class="proof-row"><span>Income mix</span><strong>Dividends + interest</strong></div>
+            </div>
+          </div>
+
+          <div class="chart-proof">
+            <img src="assets/report-2.png" alt="" />
+          </div>
+        </div>
+        <div class="callout review">FULL REVIEW REPORT</div>
+        <div class="callout return">TOTAL RETURN +12.24%</div>
+        <div class="callout risk">TOP HOLDING 25.43%</div>
+        <div class="callout ok">RECONCILIATION OK</div>
+      </section>
+
+      <section class="scene agent-scene" id="scene-agents">
+        <div class="grain" data-layout-ignore></div>
+        <div class="agent-content">
+          <div class="agent-copy">
+            <div class="eyebrow">Works with your agents</div>
+            <h2>Use these skills where your team already works.</h2>
+            <p>Personal agents like OpenClaw and Hermes can run them, alongside Codex from OpenAI, Claude from Anthropic, and Gemini from Google.</p>
+            <div class="agent-tags">
+              <div class="agent-tag">XTB conversion</div>
+              <div class="agent-tag">Portfolio review</div>
+              <div class="agent-tag">Report generation</div>
+            </div>
+          </div>
+          <div class="agent-board">
+            <div class="agent-board-title">One skill layer, many agents</div>
+            <span class="agent-line openclaw"></span>
+            <span class="agent-line hermes"></span>
+            <span class="agent-line codex"></span>
+            <span class="agent-line claude"></span>
+            <span class="agent-line gemini"></span>
+            <div class="skill-core">
+              <img src="assets/brand/xtb-skills-mark.svg" alt="" />
+              <strong>XTB Skills</strong>
+              <span>Reusable workflows</span>
+            </div>
+            <article class="agent-card openclaw">
+              <div class="agent-icon"><img src="assets/agent-logos/openclaw-logo.svg" alt="" /></div>
+              <div><span class="agent-name">OpenClaw</span><span class="agent-maker">Personal agent</span></div>
+            </article>
+            <article class="agent-card hermes">
+              <div class="agent-icon"><img src="assets/agent-logos/hermes-logo.png" alt="" /></div>
+              <div><span class="agent-name">Hermes</span><span class="agent-maker">Personal agent</span></div>
+            </article>
+            <article class="agent-card codex">
+              <div class="agent-icon"><img src="assets/agent-logos/codex-logo.png" alt="" /></div>
+              <div><span class="agent-name">Codex</span><span class="agent-maker">OpenAI</span></div>
+            </article>
+            <article class="agent-card claude">
+              <div class="agent-icon"><img src="assets/agent-logos/claude-logo.svg" alt="" /></div>
+              <div><span class="agent-name">Claude</span><span class="agent-maker">Anthropic</span></div>
+            </article>
+            <article class="agent-card gemini">
+              <div class="agent-icon"><img src="assets/agent-logos/gemini-logo.png" alt="" /></div>
+              <div><span class="agent-name">Gemini</span><span class="agent-maker">Google</span></div>
+            </article>
+          </div>
+        </div>
+      </section>
+
+      <section class="scene split-scene" id="scene-split">
+        <div class="split-content">
+          <div class="split-card app">
+            <img src="assets/wealthfolio.png" alt="" />
+          </div>
+          <div class="split-card report">
+            <img src="assets/report-1.png" alt="" />
+          </div>
+        </div>
+        <div class="final-copy">
+          <div class="final-brand">
+            <img src="assets/brand/xtb-skills-mark.svg" alt="" />
+            <div>
+              <h2>From transactions to decisions.</h2>
+              <p>Import cleanly. Review intelligently.</p>
+              <div class="export-note">XTB Skills: Wealthfolio + PortfolioPerformance</div>
+            </div>
+          </div>
+          <div class="checks">
+            <div class="check">Imported</div>
+            <div class="check">Reviewed</div>
+            <div class="check">Exportable</div>
+            <div class="check">Ready</div>
+          </div>
+        </div>
+      </section>
+
+      <button class="preview-audio-button" id="preview-audio-button" type="button">
+        Play with sound
+      </button>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/gsap@3.14.2/dist/gsap.min.js"></script>
+    <script>
+      window.__timelines = window.__timelines || {};
+
+      gsap.set("#scene-flow, #scene-report, #scene-agents, #scene-split", { opacity: 0 });
+      gsap.set(".workflow-pill, .arrow", { opacity: 0 });
+      gsap.set("#signal-path", { strokeDasharray: 1600, strokeDashoffset: 1600 });
+      gsap.set(".metric, .proof-panel, .chart-proof, .callout, .review-spotlight", { opacity: 0 });
+      gsap.set(".agent-copy .eyebrow, .agent-copy h2, .agent-copy p, .agent-tag, .agent-board, .skill-core, .agent-card", { opacity: 0 });
+      gsap.set(".final-copy, .split-card, .check", { opacity: 0 });
+
+      const tl = gsap.timeline({
+        paused: true,
+        defaults: { ease: "power2.out", duration: 0.6 },
+      });
+
+      tl.addLabel("hook", 0);
+      tl.from(".wealthfolio-wrap", { scale: 1.04, opacity: 0, duration: 0.8, ease: "power3.out" }, "hook");
+      tl.from(".hook-copy .eyebrow", { y: 24, opacity: 0, duration: 0.45 }, "hook+=0.25");
+      tl.from(".hook-copy h1", { y: 44, opacity: 0, duration: 0.7, ease: "power3.out" }, "hook+=0.48");
+      tl.from(".hook-copy .subtitle", { y: 30, opacity: 0, duration: 0.55 }, "hook+=1.0");
+      tl.from(".signal-card", { y: 34, opacity: 0, scale: 0.96, duration: 0.55 }, "hook+=1.35");
+      tl.to("#scene-dark .wealthfolio-shot", { scale: 1.045, duration: 4.6, ease: "sine.inOut" }, "hook");
+
+      tl.addLabel("flow", 3.6);
+      tl.to("#scene-flow", { opacity: 1, duration: 0.35 }, "flow");
+      tl.to("#scene-dark", { opacity: 0, duration: 0.45 }, "flow+=0.2");
+      tl.fromTo(
+        "#scene-flow .wealthfolio-shot",
+        { scale: 1.03 },
+        { scale: 1.075, duration: 3.5, ease: "sine.inOut" },
+        "flow",
+      );
+      tl.to(".workflow-pill", { opacity: 1, y: 0, duration: 0.55, stagger: 0.18 }, "flow+=0.55");
+      tl.from(".workflow-pill", { y: 28, scale: 0.97, duration: 0.55, stagger: 0.18 }, "flow+=0.55");
+      tl.to(".arrow", { opacity: 1, scaleX: 1, duration: 0.45, stagger: 0.18 }, "flow+=1.05");
+      tl.to("#signal-path", { strokeDashoffset: 0, duration: 1.7, ease: "power2.inOut" }, "flow+=2.0");
+
+      tl.addLabel("report", 7.0);
+      tl.to("#scene-report", { opacity: 1, duration: 0.55 }, "report");
+      tl.to("#scene-flow", { opacity: 0, duration: 0.55 }, "report+=0.2");
+      tl.to(".review-spotlight", { opacity: 1, y: 0, duration: 0.45 }, "report+=0.25");
+      tl.from(".review-spotlight", { y: -18, scale: 0.98, duration: 0.45 }, "report+=0.25");
+      tl.from(".report-header", { y: -38, opacity: 0, duration: 0.65, ease: "power3.out" }, "report+=0.35");
+      tl.to(".metric", { opacity: 1, y: 0, duration: 0.5, stagger: 0.12 }, "report+=0.9");
+      tl.from(".metric", { y: 34, scale: 0.98, duration: 0.5, stagger: 0.12 }, "report+=0.9");
+      tl.to(".proof-panel", { opacity: 1, y: 0, duration: 0.5, stagger: 0.12 }, "report+=1.75");
+      tl.from(".proof-panel", { y: 36, duration: 0.5, stagger: 0.12 }, "report+=1.75");
+      tl.to(".chart-proof", { opacity: 1, scale: 1, duration: 0.65 }, "report+=2.55");
+      tl.from(".chart-proof", { y: 42, scale: 0.985, duration: 0.65 }, "report+=2.55");
+
+      tl.addLabel("evidence", 18.5);
+      tl.to(".callout.review", { opacity: 1, y: 0, duration: 0.45 }, "evidence");
+      tl.from(".callout.review", { y: 18, scale: 0.96, duration: 0.45 }, "evidence");
+      tl.to(".callout.return", { opacity: 1, y: 0, duration: 0.45 }, "evidence+=0.55");
+      tl.from(".callout.return", { y: 18, scale: 0.96, duration: 0.45 }, "evidence+=0.55");
+      tl.to(".callout.risk", { opacity: 1, y: 0, duration: 0.45 }, "evidence+=1.1");
+      tl.from(".callout.risk", { y: 18, scale: 0.96, duration: 0.45 }, "evidence+=1.1");
+      tl.to(".callout.ok", { opacity: 1, y: 0, duration: 0.45 }, "evidence+=1.65");
+      tl.from(".callout.ok", { y: 18, scale: 0.96, duration: 0.45 }, "evidence+=1.65");
+      tl.to(".report-content", { scale: 1.025, duration: 4.8, ease: "sine.inOut" }, "evidence");
+
+      tl.addLabel("agents", 24.0);
+      tl.to("#scene-agents", { opacity: 1, duration: 0.55 }, "agents");
+      tl.to("#scene-report", { opacity: 0, duration: 0.55 }, "agents+=0.18");
+      tl.to(".agent-copy .eyebrow", { opacity: 1, y: 0, duration: 0.45 }, "agents+=0.28");
+      tl.from(".agent-copy .eyebrow", { y: 22, duration: 0.45 }, "agents+=0.28");
+      tl.to(".agent-copy h2", { opacity: 1, y: 0, duration: 0.72, ease: "power3.out" }, "agents+=0.48");
+      tl.from(".agent-copy h2", { y: 42, duration: 0.72, ease: "power3.out" }, "agents+=0.48");
+      tl.to(".agent-copy p", { opacity: 1, y: 0, duration: 0.55 }, "agents+=1.05");
+      tl.from(".agent-copy p", { y: 28, duration: 0.55 }, "agents+=1.05");
+      tl.to(".agent-tag", { opacity: 1, y: 0, duration: 0.36, stagger: 0.1 }, "agents+=1.55");
+      tl.from(".agent-tag", { y: 16, duration: 0.36, stagger: 0.1 }, "agents+=1.55");
+      tl.to(".agent-board", { opacity: 1, x: 0, duration: 0.65, ease: "power3.out" }, "agents+=0.58");
+      tl.from(".agent-board", { x: 42, scale: 0.985, duration: 0.65, ease: "power3.out" }, "agents+=0.58");
+      tl.to(".skill-core", { opacity: 1, scale: 1, duration: 0.55, ease: "back.out(1.35)" }, "agents+=1.25");
+      tl.from(".skill-core", { scale: 0.86, duration: 0.55, ease: "back.out(1.35)" }, "agents+=1.25");
+      tl.to(".agent-line", { scaleX: 1, duration: 0.65, stagger: 0.1, ease: "power2.out" }, "agents+=1.72");
+      tl.to(".agent-card", { opacity: 1, y: 0, scale: 1, duration: 0.5, stagger: 0.16, ease: "back.out(1.25)" }, "agents+=2.05");
+      tl.from(".agent-card", { y: 30, scale: 0.92, duration: 0.5, stagger: 0.16, ease: "back.out(1.25)" }, "agents+=2.05");
+      tl.to(".agent-card", { y: -8, duration: 1.05, yoyo: true, repeat: 4, stagger: 0.06, ease: "sine.inOut" }, "agents+=4.0");
+      tl.to(".skill-core", { boxShadow: "0 28px 84px rgba(138, 165, 42, 0.28)", duration: 0.75, yoyo: true, repeat: 4, ease: "sine.inOut" }, "agents+=3.8");
+
+      tl.addLabel("split", 34.0);
+      tl.to("#scene-split", { opacity: 1, duration: 0.55 }, "split");
+      tl.to("#scene-agents", { opacity: 0, duration: 0.55 }, "split+=0.18");
+      tl.to(".split-card", { opacity: 1, y: 0, duration: 0.65, stagger: 0.16 }, "split+=0.35");
+      tl.from(".split-card", { y: 42, scale: 0.985, duration: 0.65, stagger: 0.16 }, "split+=0.35");
+      tl.to(".final-copy", { opacity: 1, y: 0, duration: 0.6, ease: "power3.out" }, "split+=1.15");
+      tl.from(".final-copy", { y: 34, scale: 0.985, duration: 0.6 }, "split+=1.15");
+      tl.to(".check", { opacity: 1, y: 0, duration: 0.35, stagger: 0.12 }, "split+=1.78");
+      tl.from(".check", { y: 16, duration: 0.35, stagger: 0.12 }, "split+=1.78");
+
+      window.__timelines["portfolio-review-promo"] = tl;
+
+      const previewParams = new URLSearchParams(window.location.search);
+      const previewSeek = previewParams.get("seek");
+      if (previewSeek !== null) {
+        tl.time(Number(previewSeek)).pause();
+      }
+    </script>
+  </body>
+</html>

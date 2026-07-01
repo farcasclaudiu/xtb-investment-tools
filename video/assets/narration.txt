@@ -1,0 +1,15 @@
+Your portfolio already has the data.
+
+These skills turn broker exports into clean Wealthfolio imports, then into a structured portfolio review.
+
+The review skill checks performance, concentration, cash flows, income quality, reconciliation, and data confidence.
+
+It does not hide assumptions. It exposes them.
+
+And the skills are agent-ready. Use them with personal agents like OpenClaw and Hermes, or with Codex from OpenAI, Claude from Anthropic, and Gemini from Google.
+
+So you can move from transactions to decisions in minutes.
+
+Import cleanly. Review intelligently.
+
+Export support for Wealthfolio and PortfolioPerformance.

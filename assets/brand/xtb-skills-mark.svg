@@ -1,0 +1,18 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 256 256" role="img" aria-labelledby="title desc">
+  <title id="title">XTB Skills mark</title>
+  <desc id="desc">Minimal X-shaped agent skill network mark with XTB-red outer nodes and a green workflow signal.</desc>
+  <defs>
+    <linearGradient id="nodeGradient" x1="58" y1="54" x2="198" y2="202" gradientUnits="userSpaceOnUse">
+      <stop offset="0" stop-color="#f1f4ec"/>
+      <stop offset="1" stop-color="#8aa52a"/>
+    </linearGradient>
+  </defs>
+  <rect width="256" height="256" rx="44" fill="#090a08"/>
+  <path d="M76 76L180 180M180 76L76 180" fill="none" stroke="#f1f4ec" stroke-width="22" stroke-linecap="round"/>
+  <path d="M82 169L111 151L128 128L150 105L174 88" fill="none" stroke="#8aa52a" stroke-width="10" stroke-linecap="round" stroke-linejoin="round"/>
+  <circle cx="76" cy="76" r="16" fill="#e30613" stroke="url(#nodeGradient)" stroke-width="7"/>
+  <circle cx="180" cy="76" r="16" fill="#e30613" stroke="url(#nodeGradient)" stroke-width="7"/>
+  <circle cx="180" cy="180" r="16" fill="#e30613" stroke="url(#nodeGradient)" stroke-width="7"/>
+  <circle cx="76" cy="180" r="16" fill="#e30613" stroke="url(#nodeGradient)" stroke-width="7"/>
+  <circle cx="128" cy="128" r="20" fill="#8aa52a" stroke="#f1f4ec" stroke-width="7"/>
+</svg>

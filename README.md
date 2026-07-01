@@ -2,6 +2,10 @@
 
 [![skills.sh](https://skills.sh/b/farcasclaudiu/xtb-investment-tools)](https://skills.sh/farcasclaudiu/xtb-investment-tools)
 
+<p>
+  <img src="assets/brand/xtb-skills-lockup-light.svg" alt="XTB Skills logo" width="520">
+</p>
+
 A set of Python tools that turn an **XTB brokerage report** (`.xlsx` export) into:
 
 1. A complete, human-readable **portfolio review** (console and a self-contained HTML report with interactive, offline charts and analysis tables).
@@ -12,6 +16,17 @@ A set of Python tools that turn an **XTB brokerage report** (`.xlsx` export) int
 The parser is generic for XTB exports in this format. Tests generate a small
 synthetic workbook at runtime, while personal brokerage exports should stay
 local and untracked.
+
+## Demo Video
+
+Watch the 40-second overview:
+[portfolio-review-agents-40s.mp4](video/renders/portfolio-review-agents-40s.mp4)
+
+<video src="video/renders/portfolio-review-agents-40s.mp4" controls width="100%" title="XTB portfolio review skills demo"></video>
+
+## Brand Assets
+
+The repo-owned `XTB Skills` logo lives in [`assets/brand`](assets/brand), with usage notes in [`docs/brand/xtb-skills-logo.md`](docs/brand/xtb-skills-logo.md).
 
 ## Quick Start
 

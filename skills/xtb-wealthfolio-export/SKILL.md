@@ -8,6 +8,14 @@ version: 1.0.1
 
 Use this skill to create and validate Wealthfolio CSV files from XTB `Cash Operations` data from a copied skill folder. The skill bundles the required Python tools in `scripts/`, so it can run without the original repository as long as Python dependencies are installed.
 
+## Identity
+
+In the full repository, the repo-owned `XTB Skills` logo and usage notes live in `assets/brand/` and `docs/brand/xtb-skills-logo.md`.
+
+## Demo Video
+
+In the full repository, see `video/renders/portfolio-review-agents-40s.mp4` for a short overview of the XTB import, Wealthfolio export, portfolio review, and agent-ready skill workflow.
+
 ## Example Prompts
 
 - Use the XTB Wealthfolio export skill to convert `report.xlsx` into a Wealthfolio-compatible CSV.

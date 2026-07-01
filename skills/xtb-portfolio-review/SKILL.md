@@ -8,6 +8,14 @@ version: 1.0.6
 
 Use this skill to run and assess XTB portfolio reviews from a copied skill folder. The skill bundles the required Python tools in `scripts/`, so it can run without the original repository as long as Python dependencies are installed.
 
+## Identity
+
+In the full repository, the repo-owned `XTB Skills` logo and usage notes live in `assets/brand/` and `docs/brand/xtb-skills-logo.md`.
+
+## Demo Video
+
+In the full repository, see `video/renders/portfolio-review-agents-40s.mp4` for a short overview of the portfolio review workflow and how these skills can be used from personal agents such as OpenClaw and Hermes, plus Codex, Claude, and Gemini.
+
 ## Example Prompts
 
 - Use the XTB portfolio review skill to analyze `report.xlsx`, generate the HTML report, and validate cash reconciliation.

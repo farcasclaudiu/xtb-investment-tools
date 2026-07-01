@@ -9,6 +9,14 @@ version: 1.0.1
 Use this skill to create and validate Portfolio Performance CSV files from XTB
 `Cash Operations` data using the bundled `exporter.py`.
 
+## Identity
+
+In the full repository, the repo-owned `XTB Skills` logo and usage notes live in `assets/brand/` and `docs/brand/xtb-skills-logo.md`.
+
+## Demo Video
+
+In the full repository, see `video/renders/portfolio-review-agents-40s.mp4` for a short overview of the XTB conversion, portfolio review, and agent-ready skill workflow.
+
 ## Workflow
 
 1. Identify the target workbook. If omitted and exactly one non-lock `.xlsx`
