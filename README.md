@@ -19,10 +19,11 @@ local and untracked.
 
 ## Demo Video
 
-Watch the 40-second overview:
-[portfolio-review-agents-40s.mp4](video/renders/portfolio-review-agents-40s.mp4)
+Watch the 40-second overview. The preview below plays inline on GitHub; click it to open the full MP4 with audio.
 
-<video src="video/renders/portfolio-review-agents-40s.mp4" controls width="100%" title="XTB portfolio review skills demo"></video>
+[![XTB Skills demo video preview](video/renders/portfolio-review-agents-preview.gif)](video/renders/portfolio-review-agents-40s.mp4)
+
+[Open the MP4 directly](video/renders/portfolio-review-agents-40s.mp4)
 
 ## Brand Assets
 
