@@ -18,7 +18,7 @@ from pathlib import Path
 script_dir = Path("$SCRIPT_DIR")
 sys.path.insert(0, str(script_dir))
 
-for module in ("pandas", "openpyxl", "yfinance"):
+for module in ("pandas", "openpyxl", "yfinance", "playwright", "fitz"):
     if importlib.util.find_spec(module) is None:
         raise SystemExit(
             f"Missing dependency: {module}. Install with: "
@@ -27,9 +27,13 @@ for module in ("pandas", "openpyxl", "yfinance"):
 
 import main
 import html_charts
+import pdf_export
 
 if not html_charts.CHARTJS_PATH.exists():
     raise SystemExit(f"Missing Chart.js asset: {html_charts.CHARTJS_PATH}")
+
+if pdf_export.DEFAULT_PDF_SCALE != 0.8:
+    raise SystemExit("PDF exporter must default to true Playwright scale=0.8")
 
 print("XTB portfolio review skill tools are importable.")
 PY

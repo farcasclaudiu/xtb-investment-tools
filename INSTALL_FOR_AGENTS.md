@@ -122,6 +122,8 @@ skills/
       setup-env.sh
       validate-review.sh
       run-review.sh
+      export-pdf.sh
+      pdf_export.py
       main.py
       html_charts.py
       requirements.txt

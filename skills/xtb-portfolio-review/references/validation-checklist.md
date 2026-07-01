@@ -10,6 +10,8 @@ Load this before saying an XTB portfolio review is ready.
   `<skill-folder>/scripts/validate-review.sh`
 - Generate report and CSVs:
   `<skill-folder>/scripts/run-review.sh <report.xlsx>`
+- Export PDF when requested:
+  `<skill-folder>/scripts/export-pdf.sh results/<stem>_review.html`
 - If working inside the original project repository, full tests are also useful:
   `.venv/bin/python -m pytest -q`
 
@@ -41,13 +43,20 @@ Load this before saying an XTB portfolio review is ready.
 
 ## PDF / Print Validation
 
-- If charts render correctly in the browser but appear narrow, stacked, or
-  offset on the left in Chromium A4 PDF output, diagnose it as print CSS /
-  Chart.js canvas sizing, not a live-data issue.
-- Instruct the PDF exporter to use about 75-80% scale so the chart canvases fit
-  the A4 print grid. Landscape orientation is an acceptable fallback if the
-  exporter cannot set scale. Do not change report CSS for this case unless the
-  user explicitly asks for a report style change.
+- Use `scripts/export-pdf.sh`, not direct Chrome/Chromium CLI flags. In
+  particular, do not use `--force-device-scale-factor` as a substitute for PDF
+  print scale.
+- The exporter must call Playwright/browser PDF generation with true
+  `scale=0.8`, unless a user explicitly chooses a different scale.
+- Before printing, it must wait for page load, network idle, `document.fonts`,
+  and nonblank Chart.js canvases, then pause 3-5 seconds.
+- After printing, it must render the PDF pages to PNG files and check the
+  resulting page images. Do not claim PDF success until the rendered PNG pages
+  exist and chart-heavy pages are visibly nonblank.
+- If charts render correctly in browser HTML but appear narrow, stacked,
+  left-offset, or blank in PDF, diagnose the PDF export path first; do not
+  treat it as a live-data issue or change report CSS unless the user explicitly
+  asks for a report style change.
 
 ## Useful Output Files
 
