@@ -24,6 +24,13 @@ Generated locally using macOS `Zoe (Premium)` from:
 
 `assets/narration.txt`
 
+## XTB Export Screenshots
+
+User-provided screenshots used to show where to export the `.xlsx` report:
+
+- `assets/source-screens/xtb-cash-operations-export.png`
+- `assets/source-screens/xtb-new-report-date-all.png`
+
 ## Agent Logos
 
 Agent logo assets were downloaded from Dashboard Icons:

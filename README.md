@@ -28,6 +28,16 @@ Watch the 40-second overview. The 2x preview below plays inline on GitHub; click
 
 [Open the MP4 directly](video/renders/portfolio-review-agents-40s.mp4)
 
+## Where To Export The XTB XLSX
+
+In XTB, open **Account history**, select **Cash operations**, then click **Export** to download the `.xlsx` report.
+
+When XTB opens the **New report** dialog, set the date range to **All** so the exported workbook covers the entire account history. The portfolio review and exporter tools work best when they receive the full period, not only the current month or last 30 days.
+
+![XTB Account history Cash operations export location](docs/images/xtb-cash-operations-export.png)
+
+![XTB New report Date All selection](docs/images/xtb-new-report-date-all.png)
+
 ## Brand Assets
 
 The repo-owned `XTB Skills` logo lives in [`assets/brand`](assets/brand), with usage notes in [`docs/brand/xtb-skills-logo.md`](docs/brand/xtb-skills-logo.md).

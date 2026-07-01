@@ -159,7 +159,7 @@
         position: absolute;
         left: 226px;
         right: 226px;
-        top: 420px;
+        top: 544px;
         z-index: 8;
         display: grid;
         grid-template-columns: 1fr 120px 1fr 120px 1fr;
@@ -214,9 +214,9 @@
         position: absolute;
         left: 172px;
         right: 172px;
-        top: 548px;
+        top: 692px;
         z-index: 9;
-        height: 180px;
+        height: 132px;
         pointer-events: none;
       }
 
@@ -224,6 +224,83 @@
         width: 100%;
         height: 100%;
         overflow: visible;
+      }
+
+      .export-guide {
+        position: absolute;
+        left: 214px;
+        right: 214px;
+        top: 96px;
+        z-index: 10;
+        border-radius: 18px;
+        background: rgba(20, 21, 15, 0.9);
+        border: 1px solid rgba(241, 244, 236, 0.16);
+        box-shadow: 0 28px 70px rgba(0, 0, 0, 0.38);
+        overflow: hidden;
+      }
+
+      .export-guide-copy {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 26px;
+        padding: 22px 28px 18px;
+        border-bottom: 1px solid rgba(241, 244, 236, 0.12);
+      }
+
+      .export-guide-copy strong {
+        color: var(--ink);
+        font-size: 28px;
+        line-height: 1;
+      }
+
+      .export-guide-copy span {
+        color: #dbeab0;
+        font: 800 18px/1.2 "IBM Plex Mono", SFMono-Regular, monospace;
+        text-transform: uppercase;
+      }
+
+      .export-guide-frames {
+        display: grid;
+        grid-template-columns: 1.42fr 0.58fr;
+        gap: 1px;
+        background: rgba(241, 244, 236, 0.12);
+      }
+
+      .export-guide-frames figure {
+        position: relative;
+        margin: 0;
+        min-width: 0;
+        height: 224px;
+        background: #101b1f;
+      }
+
+      .export-guide-frames img {
+        display: block;
+        width: 100%;
+        height: 224px;
+        object-fit: cover;
+        opacity: 0.96;
+      }
+
+      .export-guide-frames figure:first-child img {
+        object-position: center top;
+      }
+
+      .export-guide-frames figure:last-child img {
+        object-position: 34% 8%;
+      }
+
+      .export-guide-frames figcaption {
+        position: absolute;
+        left: 18px;
+        bottom: 16px;
+        padding: 10px 13px;
+        border-radius: 999px;
+        background: rgba(9, 10, 8, 0.84);
+        color: #f1f4ec;
+        font: 800 15px/1 "IBM Plex Mono", SFMono-Regular, monospace;
+        text-transform: uppercase;
       }
 
       .report-content {
@@ -803,6 +880,22 @@
           <img class="wealthfolio-shot" src="assets/wealthfolio.png" alt="" />
           <div class="wealthfolio-dim"></div>
         </div>
+        <div class="export-guide">
+          <div class="export-guide-copy">
+            <strong>Export the XLSX from XTB</strong>
+            <span>Use the full account period</span>
+          </div>
+          <div class="export-guide-frames">
+            <figure>
+              <img src="assets/source-screens/xtb-cash-operations-export.png" alt="" />
+              <figcaption>Account history > Cash operations > Export</figcaption>
+            </figure>
+            <figure>
+              <img src="assets/source-screens/xtb-new-report-date-all.png" alt="" />
+              <figcaption>New report > Date > All</figcaption>
+            </figure>
+          </div>
+        </div>
         <div class="workflow">
           <div class="workflow-pill">
             <div>
@@ -993,7 +1086,7 @@
       window.__timelines = window.__timelines || {};
 
       gsap.set("#scene-flow, #scene-report, #scene-agents, #scene-split", { opacity: 0 });
-      gsap.set(".workflow-pill, .arrow", { opacity: 0 });
+      gsap.set(".workflow-pill, .arrow, .export-guide", { opacity: 0 });
       gsap.set("#signal-path", { strokeDasharray: 1600, strokeDashoffset: 1600 });
       gsap.set(".metric, .proof-panel, .chart-proof, .callout, .review-spotlight", { opacity: 0 });
       gsap.set(".agent-copy .eyebrow, .agent-copy h2, .agent-copy p, .agent-tag, .agent-board, .skill-core, .agent-card", { opacity: 0 });
@@ -1015,6 +1108,8 @@
       tl.addLabel("flow", 3.6);
       tl.to("#scene-flow", { opacity: 1, duration: 0.35 }, "flow");
       tl.to("#scene-dark", { opacity: 0, duration: 0.45 }, "flow+=0.2");
+      tl.to(".export-guide", { opacity: 1, y: 0, duration: 0.55, ease: "power3.out" }, "flow+=0.25");
+      tl.from(".export-guide", { y: 32, scale: 0.985, duration: 0.55, ease: "power3.out" }, "flow+=0.25");
       tl.fromTo(
         "#scene-flow .wealthfolio-shot",
         { scale: 1.03 },
