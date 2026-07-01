@@ -1,6 +1,9 @@
 # XTB Portfolio Review & CSV Exporters
 
 [![skills.sh](https://skills.sh/b/farcasclaudiu/xtb-investment-tools)](https://skills.sh/farcasclaudiu/xtb-investment-tools)
+[![Gen Agent Trust Hub](https://img.shields.io/badge/Gen%20Agent%20Trust%20Hub-pass-brightgreen)](https://skills.sh/farcasclaudiu/xtb-investment-tools/xtb-portfolio-review/security/agent-trust-hub)
+[![Socket](https://img.shields.io/badge/Socket-pass-brightgreen)](https://skills.sh/farcasclaudiu/xtb-investment-tools/xtb-portfolio-review/security/socket)
+[![Snyk](https://img.shields.io/badge/Snyk-pass-brightgreen)](https://skills.sh/farcasclaudiu/xtb-investment-tools/xtb-portfolio-review/security/snyk)
 
 <p>
   <img src="assets/brand/xtb-skills-lockup-light.svg" alt="XTB Skills logo" width="520">
@@ -30,6 +33,15 @@ Watch the 40-second overview. The 2x preview below plays inline on GitHub; click
 The repo-owned `XTB Skills` logo lives in [`assets/brand`](assets/brand), with usage notes in [`docs/brand/xtb-skills-logo.md`](docs/brand/xtb-skills-logo.md).
 
 ## Quick Start
+
+### Trust and privacy
+
+Your XTB workbooks stay local: do not upload personal brokerage exports or
+generated reports unless you intentionally choose to share them. The tools write
+reports as local files, and generated HTML charts work offline because Chart.js
+is vendored in the skill assets instead of loaded from a CDN. Marketplace audit
+badges are visible on the
+[`skills.sh` listing](https://skills.sh/farcasclaudiu/xtb-investment-tools).
 
 ### Use the skills in your own agent
 
