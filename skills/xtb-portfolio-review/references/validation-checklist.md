@@ -22,6 +22,14 @@ Load this before saying an XTB portfolio review is ready.
 - The HTML remains self-contained/offline: no CDN script or stylesheet dependency.
 - The report includes methodology/data-quality notes for pricing and reconciliation.
 
+## Live Pricing / Chart Validation
+
+- Check pricing coverage in the summary or HTML, for example `7 live / 0 cost fallbacks`.
+- Treat reports with all or most holdings priced at cost as cash-flow-valid but not live-valued.
+- Confirm the summary explicitly lists any cost fallback tickers.
+- Verify that `Portfolio Evolution - Cost vs Value` visually separates when live prices are available.
+- If the chart difference is tiny relative to the main portfolio axis, ensure the report exposes gain/loss clearly, for example through a separate gain/loss series or axis.
+
 ## Useful Output Files
 
 - `_holdings.csv`: shares, cost basis, market value, allocation, unrealized P/L, price source.
