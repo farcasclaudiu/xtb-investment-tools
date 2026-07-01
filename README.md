@@ -19,7 +19,7 @@ local and untracked.
 
 ## Demo Video
 
-Watch the 40-second overview. The preview below plays inline on GitHub; click it to open the full MP4 with audio.
+Watch the 40-second overview. The 2x preview below plays inline on GitHub; click it to open the full MP4 with audio.
 
 [![XTB Skills demo video preview](video/renders/portfolio-review-agents-preview.gif)](video/renders/portfolio-review-agents-40s.mp4)
 
